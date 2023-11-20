@@ -84,3 +84,23 @@
     height: 24px;
     opacity: 0.15;
 }
+
+.grid-container {
+    display: flex;
+    overflow: hidden;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .grid-row {
+    display: flex;
+    transition: transform 0.3s ease;
+  }
+  .grid-item {
+    width: 150px;
+    height: 350px;
+    background-color: lightblue;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

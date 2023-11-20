@@ -5,7 +5,7 @@ from models.book import Book
 
 class Genre(Basemodel, Base):
     __tablename__ = 'genres'
-    name = Column(String(250), nullable=False)
+    name = Column(String(250), nullable=False, unique=True)
     books = relationship("Book", backref="genre")
     
     def __init__(self, *args, **kwargs):

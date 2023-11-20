@@ -2,9 +2,10 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.basemodel import Basemodel, Base
 from models.comment import Comment
+from flask_login import UserMixin
 
 
-class User(Basemodel, Base):
+class User(Basemodel, Base, UserMixin):
     __tablename__ = 'users'
     name = Column(String(250), nullable=False)
     username = Column(String(250), unique=True)

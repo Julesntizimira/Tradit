@@ -1,10 +1,13 @@
 from flask import Flask, render_template, make_response, jsonify, url_for, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, IntegerField
 from wtforms.validators import input_required, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from models.user import User
+from models.book import Book
+from models.author import Author
+from models.genre import Genre
 from models import storage
 
 
@@ -23,7 +26,6 @@ login_manager.login_view = "login"
 
 @login_manager.user_loader
 def load_user(user_id):
-    user_id = int(user_id)
     return storage.session.query(User).get(user_id)
 
 
@@ -45,6 +47,21 @@ class LoginForm(FlaskForm):
     password = PasswordField(validators=[input_required(), Length(min=4, max=20)], render_kw={"placeholder":"Password"})
     submit = SubmitField("Login")
     remember = BooleanField("Remember Me")
+
+class BookRegisterForm(FlaskForm):
+    title  = StringField(validators=[input_required()], render_kw={"placeholder":"Title"})
+    release_date = IntegerField(validators=[input_required()], render_kw={"placeholder":"Release date"})
+    author = StringField(validators=[input_required(), Length(max=60)], render_kw={"placeholder":"Author"})
+    genre = StringField(validators=[input_required(), Length(max=60)], render_kw={"placeholder":"Genre"})
+    description  = StringField(validators=[input_required(), Length(max=500)], render_kw={"placeholder":"Short Description"})
+    
+  
+    submit = SubmitField("Register")
+
+    def validate_username(self, username):
+        existing_user_username = storage.session.query(User).filter(User.username == username.data).first()
+        if existing_user_username:
+            raise ValidationError("that username already exists please choose a different one" )
 
 
 app.register_blueprint(app_views)
@@ -94,15 +111,49 @@ def about():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)
+        new_user = User(username=form.username.data, password=hashed_password,  name=form.name.data, email=form.email.data, address=form.address.data)
         new_user.save()
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+@app.route('/registerbook', methods=['GET', 'POST'])
+@login_required
+def registerBook():
+    
+    form = BookRegisterForm()
+    if form.validate_on_submit():
+        author_id = ""
+        for obj in storage.session.query(Author).all():
+            if form.author.data == obj.name or form.author.data in obj.name:
+                author_id = obj.id
+                break
+        if author_id == "":
+            new_author = Author(name=form.author.data)
+            new_author.save()
+            author_id = new_author.id
+
+        genre_id = ""
+        for obj in storage.session.query(Genre).all():
+            if form.genre.data == obj.name or form.genre.data in obj.name:
+                genre_id = obj.id
+                break
+        if genre_id == "":
+            new_genre = Genre(name=form.genre.data)
+            new_genre.save()
+            genre_id = new_genre.id
+        new_book = Book(title=form.title.data, release_date=form.release_date.data, author_id=author_id, genre_id=genre_id, user_id=current_user.id)
+        new_book.save()
+        return redirect(url_for('/itemInfos'))
+    return render_template('registerbook.html', form=form)
+
+@app.route('/item', methods=['GET', 'POST'])
+@login_required
+def itemInfos():
+    return render_template('item.html')
+
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5200', debug=True)
+    app.run(host='0.0.0.0', port='5500', debug=True)
