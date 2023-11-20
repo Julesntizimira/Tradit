@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from models.basemodel import Basemodel, Base
 from models.comment import Comment
 from flask_login import UserMixin
-
+from models.room import user_room_relationship
 
 class User(Basemodel, Base, UserMixin):
     __tablename__ = 'users'
@@ -13,6 +13,7 @@ class User(Basemodel, Base, UserMixin):
     password = Column(String(250), nullable=False)
     address = Column(String(60), nullable=False)
     comments = relationship("Comment", backref="user", cascade="all, delete-orphan")
+    rooms = relationship('Room', secondary=user_room_relationship, back_populates='users')
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
