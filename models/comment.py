@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from models.basemodel import Basemodel, Base
 from sqlalchemy import String, Column, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship

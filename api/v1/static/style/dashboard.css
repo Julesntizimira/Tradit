@@ -1,0 +1,86 @@
+@font-face {
+    font-family: 'Gotham Book';
+    src: url('../fonts/Gotham\ Book\ Font\ 2.otf') format('woff');
+}
+.dashboard-container{
+    height: 967px;
+    position: fixed;
+    top: 80px;
+    bottom: 80px;
+    width: 100%;
+    display: flex;
+    font-family: Gotham Book;
+    color: black !important;
+}
+.dashboard-transparant {
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.find-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+}
+.find-text {
+    font-size: 24px;
+    font-family: Roboto, arial;
+    font-weight: 500;
+    margin-bottom: 8px;
+
+}
+.input-btn-search {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    border: 1px solid rgb(211, 211, 211);
+    border-right: none;
+    border-radius: 24px 0 0 24px;
+    background-color: transparent;
+    height: 40px;
+    width: 440px;
+    padding-left: 10px;
+    outline: none;
+    font-size: 18px;
+    font-family: Roboto, arial;
+    font-weight: 400;
+    border-right: none;
+}
+.search-input:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15)
+}
+.search-btn {
+    background-color: transparent;
+    border: 1px solid rgb(211, 211, 211);
+    border-radius: 0 24px 24px 0;
+    cursor: pointer;
+    height: 44px;
+    width: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: none;
+
+}
+.search-btn:focus {
+    outline: none; 
+}
+
+.search-icon {
+    width: 16px;
+    height: 16px;
+}
+.search-icon:hover{
+    width: 24px;
+    height: 24px;
+}
+.search-icon:active{
+    width: 24px;
+    height: 24px;
+    opacity: 0.15;
+}

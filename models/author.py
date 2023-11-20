@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from sqlalchemy import Column, String
 from sqlalchemy.orm import declarative_base, relationship
 from models.basemodel import Basemodel, Base

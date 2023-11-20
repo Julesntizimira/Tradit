@@ -1,0 +1,40 @@
+{% extends 'login.html' %}
+{% block container %}
+<main>
+    <div class="reg-container">
+        <div class="register-container">
+            <div class="register_form">
+                <p class="sign_up-form">Register</p>
+                <p class="sign-up-under">Join us in celebrating the joy of reading and the magic of sharing stories</p>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="field">
+                        <div class="control">
+                            {{ form.username(class="large", autofocus="") }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form.password(class="large") }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form.password(class="large") }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form.password(class="large") }}
+                        </div>
+                    </div>
+                    <button class="form-btn" type="submit">Submit</button>
+                </form>
+            <div>
+                    <span>already have an account </span>
+                    <a href="{{ url_for('login') }}" class="sign_up">Login</a><br>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

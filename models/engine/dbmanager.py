@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from models.user import User, Base, Basemodel
 from models.comment import Comment
 from models.book import Book
@@ -21,7 +20,7 @@ class Dbmanager:
     __engine = None
     __session = None
     def __init__(self):
-        self.__engine = create_engine('mysql+mysqldb://root:Mypassword%238@localhost:3306/tutodb')
+        self.__engine = create_engine('mysql+mysqlconnector://jules:mypassword@localhost:3306/bookdb')
 
     def all(self, cls=None):
         """query on the current database session"""
@@ -80,3 +79,7 @@ class Dbmanager:
         else:
             count = len(self.all(cls).values())
         return count
+    
+    @property
+    def session(self):
+        return self.__session

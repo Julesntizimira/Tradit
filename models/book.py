@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from models.basemodel import Basemodel, Base
 from models.comment import Comment
 from sqlalchemy import Column, String, Integer, ForeignKey

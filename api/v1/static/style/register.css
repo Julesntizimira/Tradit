@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Gotham Book';
+    src: url('../fonts/Gotham\ Book\ Font\ 2.otf') format('woff');
+}
+.reg-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 120px;
+}
+.register_form {
+    border: 1px solid rgb(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px;
+    height: 400px;
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    width: 300px;
+}
+.sign_up-form {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+.sign-up-under {
+    color: rgb(106, 106, 106);
+    font-family: Roboto, Arial;
+    font-size: 14px;
+}
+

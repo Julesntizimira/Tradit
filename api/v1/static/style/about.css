@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'Gotham Book';
+    src: url('../fonts/Gotham\ Book\ Font\ 2.otf') format('woff');
+}
+section {
+    background-image: url(../images/large_GoldenTriangle.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 967px;
+    position: fixed;
+    top: 80px;
+    bottom: 80px;
+    width: 100%;
+    display: flex;
+    font-family: Gotham Book;
+}
+.stories {
+    width: 100%;
+    height: 100%;
+    background-color:  rgba(0, 0, 0, 0.75);
+    color: #fff !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+.preview {
+    flex: 1;
+    margin: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.title {
+    flex: 2;
+    font-weight: 700;
+    color: #11b6c3 !important;
+    font-weight: 500;
+
+}
+.story {
+    flex: 4;
+    width: 50%;
+}

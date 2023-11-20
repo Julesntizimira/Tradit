@@ -1,6 +1,5 @@
-#!/usr/bin/python3
 from sqlalchemy import Column, String
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import relationship
 from models.basemodel import Basemodel, Base
 from models.comment import Comment
 
@@ -8,6 +7,9 @@ from models.comment import Comment
 class User(Basemodel, Base):
     __tablename__ = 'users'
     name = Column(String(250), nullable=False)
+    username = Column(String(250), unique=True)
+    email = Column(String(250), unique=True)
+    password = Column(String(250), nullable=False)
     address = Column(String(60), nullable=False)
     comments = relationship("Comment", backref="user", cascade="all, delete-orphan")
     
