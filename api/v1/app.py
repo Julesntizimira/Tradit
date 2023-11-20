@@ -38,6 +38,10 @@ def generate_unique_code():
     return code
 
 
+
+
+
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
@@ -198,6 +202,7 @@ def generate_unique_code(length):
             break
     
     return code
+
 
 @app.route("/", methods=["POST", "GET"])
 def home():
