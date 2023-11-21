@@ -1,0 +1,57 @@
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.join {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.create-btn {
+    width: 100%;
+}
+.message-box {
+    margin: 120px;
+    border: 2px solid black;
+    border-radius:  10px;
+    background-color: whitesmoke;
+    height: 300px;
+    display: flex;
+    flex-direction:  column;
+    width: 500px;
+    align-items: stretch;
+}
+.message {
+    overflow-y: scroll;
+    flex: 1;
+    width: 100%;
+}
+.inputs{
+    padding: 10px;
+    display: flex;
+}
+
+h2 {
+    text-align: center;
+    font-family: Roboto, Arial;
+    font-size: 12px;
+}
+#message {
+    flex: 1;
+}
+.text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .muted {
+    font-size: 10px;
+    color: darkgray;
+  }

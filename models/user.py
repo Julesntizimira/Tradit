@@ -1,9 +1,20 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.basemodel import Basemodel, Base
 from models.comment import Comment
 from flask_login import UserMixin
-from models.room import user_room_relationship
+
+
+
+user_room_relationship = Table('user_room_relationship', Base.metadata,
+    Column('user_id', String(60), ForeignKey('users.id')),
+    Column('room_id', String(60), ForeignKey('rooms.id'))
+)
+
+class Room(Basemodel, Base):
+    __tablename__ = 'rooms'
+    users = relationship('User', secondary=user_room_relationship, back_populates='rooms')
+
 
 class User(Basemodel, Base, UserMixin):
     __tablename__ = 'users'
