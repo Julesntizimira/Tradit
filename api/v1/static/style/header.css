@@ -12,10 +12,10 @@ header{
     color: white;
     font-weight: 500;
     margin: 20px;
-    flex: 4;
+    flex: 5;
 }
 .bar {
-    flex: 2;
+    flex: 3;
     display: flex;
     flex-direction: row;
     align-items: center;

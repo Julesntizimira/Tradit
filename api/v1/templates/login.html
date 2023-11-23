@@ -12,9 +12,17 @@
     <link rel="stylesheet" href="../static/style/dashboard.css">
     <link rel="stylesheet" href="../static/style/register.css">
     <link rel="stylesheet" href="../static/style/room.css">
+    <link rel="stylesheet" href="../static/style/style.css" type="text/css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"
+    ></script>
 </head>
 <body>
     <header>
@@ -28,6 +36,7 @@
             <div class="about"><a href="{{ url_for('about') }}">SWAP</a></div>
             <div class="about"><a href="{{ url_for('about') }}">SELL</a></div>
             <div class="about"><a href="{{ url_for('about') }}">BUY</a></div>
+            <div class="about"><a href="{{ url_for('user') }}">COMMUNITY</a></div>
             <div class="profile-pic"><img src="" alt=""><img src="../static/profiles/IMG_2228.JPG" alt=""></div>
             <div class="notification-bar">
                 <img src="../static/icons/notifications.svg" alt="">

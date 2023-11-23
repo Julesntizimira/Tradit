@@ -1,8 +1,9 @@
-from models.user import User, Base, Basemodel
+from models.user import User, Base, Basemodel, Room
 from models.comment import Comment
 from models.book import Book
 from models.genre import Genre
 from models.author import Author
+from models.message import Message
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 
@@ -12,7 +13,9 @@ classes = {
                 'Book': Book,
                 'Genre': Genre,
                 'Author': Author,
-                'Comment': Comment
+                'Comment': Comment,
+                'Room': Room,
+                'Message': Message
                 }
 
 

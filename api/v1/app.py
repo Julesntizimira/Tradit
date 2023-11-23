@@ -1,14 +1,16 @@
-from flask import Flask, render_template, make_response, jsonify, url_for, redirect, session, request
+from flask import Flask, render_template, make_response, jsonify, url_for, redirect, session, abort
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, IntegerField
 from wtforms.validators import input_required, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
-from models.user import User
+from models.user import User, Room
 from models.book import Book
 from models.author import Author
 from models.genre import Genre
+from models.message import Message
 from models import storage
+
 
 from flask_socketio import join_room, leave_room, send, SocketIO
 import random
@@ -162,84 +164,61 @@ def itemInfos():
     return render_template('item.html')
 
 
+@app.route('/users', methods=['GET', 'POST'])
+def user():
+    users = []
+    for user in storage.session.query(User).all():
+        if user.id != current_user.id:
+            users.append(user)
+    return render_template('user.html', users=users)
 
 
-rooms = {}
-
-def generate_unique_code(length):
-    while True:
-        code = ""
-        for _ in range(length):
-            code += random.choice(ascii_uppercase)
-        
-        if code not in rooms:
-            break
-    
-    return code
-
-@app.route("/home", methods=["POST", "GET"])
-def home():
-    session.clear()
-    if request.method == "POST":
-        name = request.form.get("name")
-        code = request.form.get("code")
-        join = request.form.get("join", False)
-        create = request.form.get("create", False)
-
-        if not name:
-            return render_template("home.html", error="Please enter a name.", code=code, name=name)
-
-        if join != False and not code:
-            return render_template("home.html", error="Please enter a room code.", code=code, name=name)
-        
-        room = code
-        if create != False:
-            room = generate_unique_code(4)
-            rooms[room] = {"members": 0, "messages": []}
-        elif code not in rooms:
-            return render_template("home.html", error="Room does not exist.", code=code, name=name)
-        
-        session["room"] = room
-        session["name"] = name
-        return redirect(url_for("room"))
-
-    return render_template("home.html")
-
-@app.route("/room")
-def room():
-    room = session.get("room")
-    if room is None or session.get("name") is None or room not in rooms:
-        return redirect(url_for("home"))
-
-    return render_template("room.html", code=room, messages=rooms[room]["messages"])
+@app.route("/room/<user_id>")
+@login_required
+def room(user_id):
+    user = storage.get(User, user_id)
+    rooms = current_user.rooms
+    user_room = None
+    if rooms:
+        for room in rooms:
+            if room.users and user in room.users:
+                user_room = room
+                break
+    if not user_room:
+        user_room = Room(users=[current_user, user], members=2)
+        user_room.save()
+    if not user_room:
+        abort(500)
+    session["room"] = user_room.id
+    session["name"] = current_user.name
+    message_objs = user_room.messages
+    messages = []
+    for obj in message_objs:
+        messages.append({'name': obj.name, 'message': obj.text})
+    return render_template("room.html", code=user_room.id, messages=messages)
 
 @socketio.on("message")
 def message(data):
     room = session.get("room")
-    if room not in rooms:
-        return 
-    
     content = {
         "name": session.get("name"),
         "message": data["data"]
     }
     send(content, to=room)
-    rooms[room]["messages"].append(content)
+    content['room_id'] = room
+    content['text'] = content['message']
+    del(content['message'])
+    new_message = Message(**content)
+    new_message.save()
     print(f"{session.get('name')} said: {data['data']}")
 
 @socketio.on("connect")
 def connect(auth):
     room = session.get("room")
     name = session.get("name")
-    if not room or not name:
-        return
-    if room not in rooms:
-        leave_room(room)
-        return
-    
+
     join_room(room)
     send({"name": name, "message": "has entered the room"}, to=room)
-    rooms[room]["members"] += 1
     print(f"{name} joined room {room}")
 
 @socketio.on("disconnect")
@@ -248,10 +227,12 @@ def disconnect():
     name = session.get("name")
     leave_room(room)
 
-    if room in rooms:
-        rooms[room]["members"] -= 1
-        if rooms[room]["members"] <= 0:
-            del rooms[room]
+    the_room = storage.get('Room', room)
+    if the_room is not None:
+        the_room.members -= 1
+        if the_room.members <= 0:
+            storage.delete(the_room)
+            storage.save()
     
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")

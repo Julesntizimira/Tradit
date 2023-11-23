@@ -1,0 +1,13 @@
+{% extends 'login.html' %}
+{% block container %}
+<div class="dashboard-container">
+    <div class="dashboard-transparant">
+            <ul class="user-box">
+                {% for user in users %}
+                <li class="user-name"><a href="{{ url_for('room', user_id=user.id) }}">{{ user.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

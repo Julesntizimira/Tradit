@@ -1,9 +1,8 @@
-from sqlalchemy import Column, String, ForeignKey, Table
+from sqlalchemy import Column, String, ForeignKey, Table, Integer
 from sqlalchemy.orm import relationship
 from models.basemodel import Basemodel, Base
 from models.comment import Comment
 from flask_login import UserMixin
-
 
 
 user_room_relationship = Table('user_room_relationship', Base.metadata,
@@ -14,6 +13,11 @@ user_room_relationship = Table('user_room_relationship', Base.metadata,
 class Room(Basemodel, Base):
     __tablename__ = 'rooms'
     users = relationship('User', secondary=user_room_relationship, back_populates='rooms')
+    messages = relationship("Message", backref="room", cascade="all, delete-orphan")
+    members = Column(Integer, nullable=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class User(Basemodel, Base, UserMixin):
