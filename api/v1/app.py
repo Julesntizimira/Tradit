@@ -1,6 +1,7 @@
-from flask import Flask, render_template, make_response, jsonify, url_for, redirect, session, abort
+from flask import Flask, render_template, make_response, jsonify, url_for, redirect, session, abort, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, IntegerField
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import input_required, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
@@ -16,7 +17,7 @@ from flask_socketio import join_room, leave_room, send, SocketIO, emit
 import random
 from string import ascii_uppercase
 
-
+from api.v1.handleImage import handleImage
 
 
 from api.v1.views import app_views
@@ -39,12 +40,18 @@ def load_user(user_id):
     return storage.session.query(User).get(user_id)
 
 
+
+
+
+    
+
 class RegisterForm(FlaskForm):
     name = StringField(validators=[input_required(), Length(min=4, max=20)], render_kw={"placeholder":"Name"})
     address = StringField(validators=[input_required(), Length(min=4, max=20)], render_kw={"placeholder":"Address"})
     username = StringField(validators=[input_required(), Length(min=4, max=20)], render_kw={"placeholder":"Username"})
     email = EmailField(validators=[input_required(), Email(message="Invalid email address")], render_kw={"placeholder":"Email"})
     password = PasswordField(validators=[input_required(), Length(min=4, max=20), ], render_kw={"placeholder":"Password"})
+    file = FileField('file', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
     submit = SubmitField("Register")
 
     def validate_username(self, username):
@@ -105,7 +112,7 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', name=current_user.name)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -123,6 +130,8 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
+        file = form.file.data
+        handleImage(file, form.name.data, 'profiles')
         new_user = User(username=form.username.data, password=hashed_password,  name=form.name.data, email=form.email.data, address=form.address.data)
         new_user.save()
         return redirect(url_for('login'))
@@ -131,7 +140,6 @@ def register():
 @app.route('/registerbook', methods=['GET', 'POST'])
 @login_required
 def registerBook():
-    
     form = BookRegisterForm()
     if form.validate_on_submit():
         author_id = ""
@@ -178,15 +186,18 @@ def user():
 def room(user_id):
     user = storage.get(User, user_id)
     rooms = current_user.rooms
-    user_room = None,
+    
+    user_room = None
     if rooms:
         for room in rooms:
             if room.users and user in room.users:
                 user_room = room
                 break
+
     if not user_room:
         user_room = Room(users=[current_user, user], members=2)
         user_room.save()
+
     if not user_room:
         abort(500)
 

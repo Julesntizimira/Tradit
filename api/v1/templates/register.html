@@ -6,7 +6,7 @@
             <div class="register_form">
                 <p class="sign_up-form">Register</p>
                 <p class="sign-up-under">Join us in celebrating the joy of reading and the magic of sharing stories</p>
-                <form method="POST" action="">
+                <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     <div class="field">
                         <div class="control">
@@ -31,6 +31,11 @@
                     <div class="field">
                         <div class="control">
                             {{ form.address(class="large") }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form.file(class="large") }}
                         </div>
                     </div>
                     <button class="form-btn" type="submit">Submit</button>
