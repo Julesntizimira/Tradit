@@ -12,7 +12,7 @@ from models.message import Message
 from models import storage
 
 
-from flask_socketio import join_room, leave_room, send, SocketIO
+from flask_socketio import join_room, leave_room, send, SocketIO, emit
 import random
 from string import ascii_uppercase
 
@@ -178,7 +178,7 @@ def user():
 def room(user_id):
     user = storage.get(User, user_id)
     rooms = current_user.rooms
-    user_room = None
+    user_room = None,
     if rooms:
         for room in rooms:
             if room.users and user in room.users:
@@ -189,13 +189,16 @@ def room(user_id):
         user_room.save()
     if not user_room:
         abort(500)
-    session["room"] = user_room.id
-    session["name"] = current_user.name
+
     message_objs = user_room.messages
     messages = []
     for obj in message_objs:
         messages.append({'name': obj.name, 'message': obj.text})
-    return render_template("room.html", code=user_room.id, messages=messages)
+    
+    session["room"] = user_room.id
+    session["name"] = current_user.name
+    session['messages'] = messages
+    return render_template("room.html", receiver=user.name, name=session.get("name"), code=user_room.id, messages=session.get('messages'))
 
 @socketio.on("message")
 def message(data):
@@ -204,6 +207,7 @@ def message(data):
         "name": session.get("name"),
         "message": data["data"]
     }
+    session.get('messages').append(content)
     send(content, to=room)
     content['room_id'] = room
     content['text'] = content['message']
@@ -212,13 +216,21 @@ def message(data):
     new_message.save()
     print(f"{session.get('name')} said: {data['data']}")
 
+
+
+
 @socketio.on("connect")
 def connect(auth):
     room = session.get("room")
     name = session.get("name")
 
     join_room(room)
-    send({"name": name, "message": "has entered the room"}, to=room)
+    send({'msg': 'clean'}, to=room)
+    
+    for msg in session.get('messages'):
+        send(msg, to=room)
+    send({"name": name, "message": f"{name} has entered the room"}, to=room)    
+    
     print(f"{name} joined room {room}")
 
 @socketio.on("disconnect")

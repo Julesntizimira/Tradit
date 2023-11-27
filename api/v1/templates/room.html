@@ -2,48 +2,68 @@
 {% block container %}
 <div class="dashboard-container">
     <div class="dashboard-transparant">
-        <div class="message-box">
-            <h2>Chat Room: {{code}}</h2>
-            <div class="messages" id="messages"></div>
-            <div class="inputs">
-                <input type="text" rows="3" placeholder="message" name="message" id="message">
-                <button type="button" name="send" id="send-btn" onClick="sendMessage()">Send</button>
+        <div class="user-profile">
+            <div class="cover-photo">
+            </div>
+            <div class="profile-pic">
+            </div>
+            <div class="message-box">
+                <h2>Chat Room: {{ receiver|title }}</h2>
+                <div class="messages"></div>
+                <div class="inputs">
+                    <input type="text" placeholder="Type something" class="input-msg">
+                    <button class="send-btn" onclick="SendMessage()">SEND</button>
+                </div>
             </div>
         </div>
+        
     </div>
 </div>
+
+
 <script type="text/javascript">
-    var socketio = io();
-
-    const message = document.getElementById("messages")
-
-    const createMessage = (name, msg) => {
-        const content = `
-        <div class="text">
-            <span>
-                <strong>${name}</strong>: ${msg}
-            </span>
-            <span class="muted">
-                ${new Date().toLocaleString()}
-            </span>
-
-        </div>
-        `
-        messages.innerHTML += content;
-    };
-    socketio.on("message", (data) => {
-        createMessage(data.name, data.message);
+    const socket = io();
+    socket.on('message', (data) => {
+        if (data.msg === 'clean') {
+            document.querySelector('.messages').innerHTML = "";
+        } else {
+            CreateMessage(data);
+        }
     })
-    const sendMessage = () => {
-    const message = document.getElementById("message");
-    if (message.value == "") return;
-    socketio.emit("message", { data: message.value });
-    message.value = "";
-    };
+    function CreateMessage(data) {
+        const p = document.createElement('p');
+        const d = document.createElement('div');
+
+        const span_msg = document.createElement('span')
+        span_msg.innerHTML = `${data.message}`
+
+        const span_username = document.createElement('span')
+        span_username.innerHTML = `${data.name}`
+
+        p.innerHTML = span_msg.outerHTML;
+        p.classList.add('msg')
+        if (data.name === '{{ name }}') {
+            d.classList.add('sent-message-div')
+            p.classList.add('sent-message-p')
+
+        } else {
+            d.classList.add('received-message-div')
+            p.classList.add('received-message-p') 
+        }
+        d.append(p);
+        document.querySelector('.messages').append(d);
+    }
+    function SendMessage() {
+        const msg = document.querySelector('.input-msg').value;
+        if (msg === '') {
+            return;
+        }
+        socket.send({'data': msg});
+        document.querySelector('.input-msg').value = '';
+    }
+    for (let msg of store) {
+        CreateMessage(msg);
+    }
 </script>
-{% for msg in messages %}
-<script type="text/javascript">
-  createMessage("{{msg.name}}", "{{msg.message}}");
-</script>
-{% endfor %}
+
 {% endblock %}
