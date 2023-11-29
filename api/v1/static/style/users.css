@@ -1,0 +1,18 @@
+.user-name {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    padding-left: 5px;
+    font-family: Roboto, Arial;
+    font-weight: 500;
+
+}
+.user-name a{
+    margin-left: 5px;
+    text-decoration: none;
+    color: rgb(38, 100, 246)
+}
+.user-name a:hover {
+    opacity: 0.7;
+}
+

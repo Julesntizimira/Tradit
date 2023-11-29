@@ -1,0 +1,126 @@
+.book-container {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    font-family: Roboto, Arial;
+    padding: 20px;
+}
+.book-rep-image {
+    max-width: 100%;
+}
+.book-rep-photo {
+    flex: 4;
+    padding: 10px;
+    border-right: 2px solid black;
+    margin-right: 20px;
+}
+.book-rep-infos {
+    flex: 3;
+}
+.book-rep-title {
+    font-weight: 700;
+    font-size: 28px;
+}
+.book-rep-author{
+    font-size: 20px;
+    font-weight: 500;
+    margin: 10px;
+
+}
+.book-rep-genre{
+    font-size: 16px;
+    font-weight: 400;
+    margin: 10px;
+    color: rgb(58, 58, 58); 
+}
+.book-rep-description {
+    font-size: 14px;
+    font-weight: 400;
+ 
+}
+.book-rep-price-users {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    border: none;
+    padding: 5px;
+    margin-left: 50px;
+}
+.users {
+    display: flex;
+    flex-direction: row;
+    font-size: 12px;
+}
+.book-rep-comments {
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 60%;
+    min-height: 300px;
+    position: relative;
+    padding: 20px;
+
+}
+.cont {
+    max-height: 75%;
+    overflow-y: scroll;
+    border: none;
+    padding: 10px;
+}
+.user-box {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+.user-profile-rep {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+.comment-inputs {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    left: 5px;
+    display: flex;
+    margin: 10px;
+    background-color: white;
+
+}
+.input-comment {
+    padding: 5px;
+    margin-right: 5px;
+    border-radius: 8px;
+    border: 1px solid black;
+    width: 65%;
+    height: 42px;
+}
+.swappers {
+    font-weight: 500;
+    font-size: 16px;
+    margin-left: 20px;
+}
+
+.comments-box{
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.commenter-profile{
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    margin-right: 5px;
+}
+.comment {
+    margin-right: 5px;
+    border: 1px solid rgb(196, 196, 196);
+    padding: 10px;
+    border-radius: 16px;
+    color: rgb(104, 104, 104);
+    font-size: 14px;
+}

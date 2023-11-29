@@ -1,12 +1,37 @@
 /* Add this CSS to your existing stylesheet or create a new one */
 
+.user-profile {
+    display: flex;
+    flex-direction: row;
+    font-family: Roboto, Arial;
+}
+
+.user-profile-infos{
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+.profile-name {
+    margin-top: 10px;
+    font-weight: 500;
+    font-size: 18px;
+}
+.user-profile-pic img {
+    width: 120px;
+    border-radius: 50px;
+}
+
+
 .message-box {
+    flex: 1;
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 8px;
     width: 300px;
     height: 500px;
-    margin: 20px auto;
+    margin: 20px 20px;
     position: relative;
 }
 
@@ -73,3 +98,4 @@ p.msg{
     background-repeat: no-repeat;
     background-size: cover;
 }
+

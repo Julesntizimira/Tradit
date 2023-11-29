@@ -109,10 +109,6 @@ def login():
                 return redirect(url_for('dashboard'))
     return render_template('login.html', form=form)
 
-@app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
-def dashboard():
-    return render_template('dashboard.html', name=current_user.name)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -120,9 +116,21 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
+def dashboard():
+    return render_template('dashboard.html', name=current_user.name)
+
+
 @app.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
+
+@app.route('/book', methods=['GET', 'POST'])
+def book():
+    return render_template('book.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -173,12 +181,12 @@ def itemInfos():
 
 
 @app.route('/users', methods=['GET', 'POST'])
-def user():
+def users():
     users = []
     for user in storage.session.query(User).all():
         if user.id != current_user.id:
             users.append(user)
-    return render_template('user.html', users=users)
+    return render_template('users.html', users=users)
 
 
 @app.route("/room/<user_id>")
@@ -207,9 +215,9 @@ def room(user_id):
         messages.append({'name': obj.name, 'message': obj.text})
     
     session["room"] = user_room.id
-    session["name"] = current_user.name
+    session["name"] = current_user.username
     session['messages'] = messages
-    return render_template("room.html", receiver=user.name, name=session.get("name"), code=user_room.id, messages=session.get('messages'))
+    return render_template("room.html", receiver=user.username, name=session.get("name"), code=user_room.id, messages=session.get('messages'))
 
 @socketio.on("message")
 def message(data):
