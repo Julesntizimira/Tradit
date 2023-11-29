@@ -13,7 +13,8 @@ class Book(Basemodel, Base):
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     description = Column(String(500), nullable=False)
     comments = relationship("Comment", backref="book", cascade="all, delete-orphan")
-
+    wishes = relationship("Wish", backref="book", cascade="all, delete-orphan")
+    offers = relationship("Offer", backref="book", cascade="all, delete-orphan")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

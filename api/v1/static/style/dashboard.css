@@ -165,5 +165,27 @@
     margin-top: 15px;
     justify-content: center;
 }
-
+.list_title {
+    font-family: Arial;
+    font-weight: 700;
+    font-size: 28px;
+    color: rgb(80, 80, 80);
+    margin: 30px;
+    margin-left: 100px;
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+}
+.search-result {
+    display: flex;
+    flex-direction: column;
+}
+.search-p {
+    color: rgb(113, 113, 113);
+    font-family: Roboto, Arial;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
 

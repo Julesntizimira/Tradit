@@ -9,9 +9,12 @@ from models.user import User, Room
 from models.book import Book
 from models.author import Author
 from models.genre import Genre
+from models.wish import Wish
+from models.comment import Comment
+from models.offer import Offer
 from models.message import Message
 from models import storage
-
+import json
 
 from flask_socketio import join_room, leave_room, send, SocketIO, emit
 import random
@@ -65,6 +68,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
     remember = BooleanField("Remember Me")
 
+class CommentForm(FlaskForm):
+    text = StringField(validators=[input_required(), Length(max=500)], render_kw={"placeholder":"Type you comment"})
+    submit = SubmitField("book")
+
+
 class BookRegisterForm(FlaskForm):
     title  = StringField(validators=[input_required()], render_kw={"placeholder":"Title"})
     release_date = IntegerField(validators=[input_required()], render_kw={"placeholder":"Release date"})
@@ -75,10 +83,10 @@ class BookRegisterForm(FlaskForm):
   
     submit = SubmitField("Register")
 
-    def validate_username(self, username):
-        existing_user_username = storage.session.query(User).filter(User.username == username.data).first()
+    def validate_username(self, title):
+        existing_user_username = storage.session.query(Book).filter(Book.title == title.data).first()
         if existing_user_username:
-            raise ValidationError("that username already exists please choose a different one" )
+            raise ValidationError("that title already exists please choose a different one" )
 
 
 app.register_blueprint(app_views)
@@ -93,6 +101,25 @@ def not_found(error):
         description: a resource was not found
     """
     return make_response(jsonify({'error': "Not found"}), 404)
+
+def getBooks():
+    books = []
+    for book in storage.all(Book).values():
+        books.append(book.to_dict())
+    return json.dumps(books)
+
+def getWishList():
+    wishList = []
+    for book in storage.session.query(Book).join(Wish).filter(Book.id == Wish.book_id).distinct(Book.id).all():
+        wishList.append(book.to_dict())
+    return json.dumps(wishList)
+
+def getOfferList():
+    OfferList = []
+    for book in storage.session.query(Book).join(Offer).filter(Book.id == Offer.book_id).distinct(Book.id).all():
+        OfferList.append(book.to_dict())
+    return json.dumps(OfferList)
+
 
 @app.route('/')
 def landing():
@@ -121,16 +148,34 @@ def logout():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html', name=current_user.name)
+    books = getBooks()
+    wishList = getWishList()
+    offerList = getOfferList()
+    
+    return render_template('dashboard.html', current_user=current_user, books=books, wishList=wishList, offerList=offerList)
 
 
 @app.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html')
 
-@app.route('/book', methods=['GET', 'POST'])
-def book():
-    return render_template('book.html')
+@app.route('/book/<book_id>', methods=['GET', 'POST'])
+def book(book_id):
+    form = CommentForm()
+    book = storage.get(Book, book_id)
+    authors = storage.all(Author).values()
+    for author in authors:
+        if author.id == book.author_id:
+            authorObj = author
+    genres =  storage.all(Genre).values()
+    for genre in genres:
+        if genre.id == book.genre_id:
+            genrename = genre.name
+    if form.validate_on_submit():
+        comment = Comment(text=form.text.data, user_id=current_user.id, book_id=book_id)
+        comment.save()
+        return redirect(url_for('book', book_id=book_id))
+    return render_template('book.html', book=book, genre=genrename, author=authorObj)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -169,9 +214,9 @@ def registerBook():
             new_genre = Genre(name=form.genre.data)
             new_genre.save()
             genre_id = new_genre.id
-        new_book = Book(title=form.title.data, release_date=form.release_date.data, author_id=author_id, genre_id=genre_id, user_id=current_user.id)
+        new_book = Book(title=form.title.data, description=form.description.data, release_date=form.release_date.data, author_id=author_id, genre_id=genre_id, user_id=current_user.id)
         new_book.save()
-        return redirect(url_for('/itemInfos'))
+        return redirect(url_for('dashboard'))
     return render_template('registerbook.html', form=form)
 
 @app.route('/item', methods=['GET', 'POST'])

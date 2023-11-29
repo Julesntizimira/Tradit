@@ -4,6 +4,8 @@ from models.book import Book
 from models.genre import Genre
 from models.author import Author
 from models.message import Message
+from models.wish import Wish
+from models.offer import Offer 
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 
@@ -15,7 +17,9 @@ classes = {
                 'Author': Author,
                 'Comment': Comment,
                 'Room': Room,
-                'Message': Message
+                'Message': Message,
+                'Offer': Offer,
+                'Wish': Wish
                 }
 
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Template</title>
+</head>
+<body>
+    <ul>
+        {% for obj in my_list %}
+            <li>{{ obj.name }}: {{ obj.value }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Use a data attribute to pass the list of objects to JavaScript -->
+    <script>
+        var myListFromJinja = {{ my_list|tojson|safe }};
+        document.getElementById('myListContainer').setAttribute('data-my-list', JSON.stringify(myListFromJinja));
+    </script>
+</body>
+</html>

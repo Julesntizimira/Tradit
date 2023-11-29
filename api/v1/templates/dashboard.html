@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="../static/style/dashboard.css">
     <link rel="stylesheet" href="../static/style/register.css">
     <link rel="stylesheet" href="../static/style/book.css">
-    <link rel="stylesheet" href="../static/style/room.css">
     <link rel="stylesheet" href="../static/style/users.css">
     <link rel="stylesheet" href="../static/style/style.css" type="text/css">
     
@@ -40,7 +39,7 @@
             <div class="about"><a href="{{ url_for('about') }}">BUY</a></div>
             <div class="about"><a href="{{ url_for('users') }}">COMMUNITY</a></div>
             <div class="profile-pic">
-              <img src="../static/profiles/{{ name }}.jpg" alt="">
+              <img src="../static/profiles/{{ current_user.username }}.jpg" alt="">
               <div class="tooltip"><a class="logout" href="{{ url_for('logout') }}">Logout</a></div>
             </div>
             <div class="notification-bar">
@@ -53,19 +52,23 @@
             </div>
         </div>
       </header>
+      <div id="bookListContainer" bookList="{{ books }}"></div>
+      <div id="wishListContainer" wishList="{{ wishList|tojson|safe }}"></div>
+      <div id="offerListContainer" offerList="{{ offerList|tojson|safe }}"></div>
       {% block container %}
         <div class="dashboard-container">
             <div class="dashboard-transparant">
                 <div class="find-container">
                     <div class="find-text">Find Books</div>
                     <div class="input-btn-search">
-                        <input class="search-input" type="text" >
-                        <button class="search-btn">
+                        <input class="search-input" type="text">
+                        <button class="search-btn" onclick="SearchBook()">
                             <img class="search-icon" src="../static/icons/search.svg" alt="">
                         </button>
                     </div>
                 </div>
-                <div><h1>SWAP</h1></div>
+                <div class="search-result"></div>
+                <div class="list_title">Offers</div>
                 <div class="grid-container">
                     <div class="grid-row">
                       <div class="grid-item">
@@ -95,7 +98,7 @@
                     </div>
                   </div>
 
-                  <div><h1>BUY</h1></div>
+                  <div class="list_title">WISH LIST</div>
                   <div class="grid-container">
                       <div class="grid-row">
                         <div class="grid-item">
@@ -153,12 +156,49 @@
           gridContainers.forEach(container => {
             container.addEventListener('wheel', handleWheel);
           });
-          document.querySelectorAll('.book-title').forEach(bookTitle => {
+          /*document.querySelectorAll('.book-title').forEach(bookTitle => {
             bookTitle.addEventListener('click', () => {
             window.location.href = "{{ url_for('book') }}";
           });
-        });
-        </script>
+        });*/
+
+        function SearchBook() {
+            const searched = document.querySelector('.search-input').value;
+            const booksJson = document.getElementById('bookListContainer').getAttribute('bookList');
+            const books = booksJson && booksJson.trim() !== '' ? JSON.parse(booksJson) : [];
+
+            const result = [];
+
+            if (searched && books) {
+                const searchedArgs = searched.split(' ');
+
+                for (let book of books) {
+                    for (let arg of searchedArgs) {
+                        if (book.title.toLowerCase().includes(arg.toLowerCase()) || arg.toLowerCase().includes(book.title.toLowerCase())) {
+                            if (!result.includes(book)) {
+                                result.push(book);
+                            }
+                        }
+                    }
+                }
+
+                document.querySelector('.search-result').innerHTML = '';
+                
+                for (let book of result) {
+                    let a = document.createElement('a');
+                    a.classList.add('search-p');
+                    
+                    a.textContent = book.title;
+                    a.setAttribute('href', '/book/' + book.id);  // Construct the URL directly in JavaScript
+
+                    document.querySelector('.search-result').appendChild(a);
+                }
+            }
+        }
+
+
+
+    </script>
     {% endblock %}
     <footer>
       <div class="trade-mark">Tradit | © Copyright 2023</div>

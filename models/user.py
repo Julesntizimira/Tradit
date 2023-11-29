@@ -28,6 +28,8 @@ class User(Basemodel, Base, UserMixin):
     password = Column(String(250), nullable=False)
     address = Column(String(60), nullable=False)
     comments = relationship("Comment", backref="user", cascade="all, delete-orphan")
+    wishes = relationship("Wish", backref="user", cascade="all, delete-orphan")
+    offers = relationship("Offer", backref="user", cascade="all, delete-orphan")
     rooms = relationship('Room', secondary=user_room_relationship, back_populates='users')
     
     def __init__(self, *args, **kwargs):
