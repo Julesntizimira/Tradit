@@ -11,16 +11,16 @@ from sqlalchemy import create_engine
 
 
 classes = {
-                'User': User,
-                'Book': Book,
-                'Genre': Genre,
-                'Author': Author,
-                'Comment': Comment,
-                'Room': Room,
-                'Message': Message,
-                'Offer': Offer,
-                'Wish': Wish
-                }
+    'User': User,
+    'Book': Book,
+    'Genre': Genre,
+    'Author': Author,
+    'Comment': Comment,
+    'Room': Room,
+    'Message': Message,
+    'Offer': Offer,
+    'Wish': Wish
+    }
 
 
 class Dbmanager:
@@ -49,6 +49,7 @@ class Dbmanager:
     def delete(self, obj=None):
         if obj is not None:
             self.__session.delete(obj)
+            self.save()
 
     def reload(self):
         Base.metadata.create_all(bind=self.__engine)

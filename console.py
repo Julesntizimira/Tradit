@@ -2,11 +2,14 @@
 import cmd
 import models
 from models import storage
-from models.user import User
+from models.user import User, Room
 from models.book import Book
 from models.genre import Genre
 from models.author import Author
 from models.comment import Comment
+from models.message import Message
+from models.wish import Wish
+from models.offer import Offer 
 import shlex
 
 
@@ -15,7 +18,11 @@ classes = {
     'Book': Book,
     'Genre': Genre,
     'Author': Author,
-    'Comment': Comment
+    'Comment': Comment,
+    'Room': Room,
+    'Message': Message,
+    'Offer': Offer,
+    'Wish': Wish
 }
 
 

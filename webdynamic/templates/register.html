@@ -6,7 +6,7 @@
             <div class="register_form">
                 <p class="sign_up-form">Register</p>
                 <p class="sign-up-under">Join us in celebrating the joy of reading and the magic of sharing stories</p>
-                <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url_for('app_pages.register') }}" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     <div class="field">
                         <div class="control">
@@ -42,7 +42,7 @@
                 </form>
             <div>
                     <span>already have an account </span>
-                    <a href="{{ url_for('login') }}" class="sign_up">Login</a><br>
+                    <a href="{{ url_for('app_pages.login') }}" class="sign_up">Login</a><br>
             </div>
         </div>
     </div>

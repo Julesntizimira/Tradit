@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Template</title>
+</head>
+<body>
+ 
+
+    <!-- Use a data attribute to pass the list of objects to JavaScript -->
+    <div id="myListContainer" data-my-list="{{ my_list|tojson|safe }}"></div>
+
+
+    <script>
+        var myListFromJinja = JSON.parse(document.getElementById('myListContainer').getAttribute('data-my-list'));
+
+        // Now you can use the array of objects in your script
+        console.log(myListFromJinja);
+    </script>
+</body>
+</html>
