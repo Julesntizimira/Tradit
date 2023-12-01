@@ -1,12 +1,12 @@
-{% extends 'dashboard.html' %}
+{% extends 'login.html' %}
 {% block container %}
 <div class="dashboard-container">
     <div class="dashboard-transparant">
             <div class="user-box">
                 {% for user in users %}
                 <div class="user-name">
-                    <img class="commenter-profile" src="../static/profiles/jules.JPG" alt="">
-                    <a href="{{ url_for('room', user_id=user.id) }}">{{ user.name }}</a>
+                    <img class="commenter-profile" src="../static/profiles/{{ user['username'] }}.JPG" alt="">
+                    <a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a>
                 </div>
                 {% endfor %}
             </div>

@@ -2,16 +2,15 @@ from webdynamic.views import app_pages
 from flask_login import login_required, current_user
 from models import storage
 from models.user import User, Room
-from flask import render_template, abort, session
+from flask import render_template, abort, session, url_for
 import requests
-import json
+
 
 @app_pages.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
     resp = requests.get('http://127.0.0.1:5500/api/v1/users')
-    users_json = resp.json()
-    user_list = json.loads(users_json)
+    users = resp.json()
     return render_template('users.html', users=users)
 
 

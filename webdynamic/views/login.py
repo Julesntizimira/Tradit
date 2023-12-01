@@ -38,17 +38,19 @@ class RegisterForm(FlaskForm):
 
 @app_pages.route('/login', methods=['GET', 'POST'])
 def login():
+    '''login page route'''
     form = LoginForm()
     if form.validate_on_submit():
         user = storage.session.query(User).filter_by(username=form.username.data).first()
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user, remember=True)
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('app_pages.users'))
     return render_template('login.html', form=form)
 
 @app_pages.route('/register', methods=['GET', 'POST'])
 def register():
+    '''register page route'''
     from webdynamic.handleImage import handleImage
     form = RegisterForm()
     if form.validate_on_submit():
@@ -57,5 +59,5 @@ def register():
         handleImage(file, form.name.data, 'profiles')
         new_user = User(username=form.username.data, password=hashed_password,  name=form.name.data, email=form.email.data, address=form.address.data)
         new_user.save()
-        return redirect(url_for('login'))
+        return redirect(url_for('app_pages.login'))
     return render_template('register.html', form=form)
