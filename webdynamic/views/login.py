@@ -55,9 +55,9 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        file = form.file.data
-        handleImage(file, form.name.data, 'profiles')
         new_user = User(username=form.username.data, password=hashed_password,  name=form.name.data, email=form.email.data, address=form.address.data)
         new_user.save()
+        file = form.file.data
+        handleImage(file, new_user.id)
         return redirect(url_for('app_pages.login'))
     return render_template('register.html', form=form)

@@ -20,7 +20,7 @@ from flask_socketio import join_room, leave_room, send, SocketIO, emit
 import random
 from string import ascii_uppercase
 
-from api.v1.handleImage import handleImage
+from webdynamic0.handleImage import handleImage
 
 
 from api.v1.views import app_views
@@ -151,7 +151,6 @@ def dashboard():
     books = getBooks()
     wishList = getWishList()
     offerList = getOfferList()
-    
     return render_template('dashboard.html', current_user=current_user, books=books, wishList=wishList, offerList=offerList)
 
 
@@ -318,4 +317,4 @@ def disconnect():
 
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port='5500', debug=True)
+    socketio.run(app, host='0.0.0.0', port='5200', debug=True)

@@ -1,4 +1,4 @@
-from flask import Flask, make_response, jsonify, session
+from flask import Flask, make_response, jsonify, session, send_from_directory
 from webdynamic.views import app_pages
 from flask_login import LoginManager
 from models import storage
@@ -6,6 +6,9 @@ from models.user import User
 from models.message import Message
 from flask_socketio import SocketIO
 from flask_socketio import join_room, leave_room, send, emit
+from datetime import datetime
+import requests
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
@@ -27,16 +30,21 @@ def message(data):
     room = session.get("room")
     content = {
         "name": session.get("name"),
-        "message": data["data"]
+        "message": data["data"],
+        "date": datetime.now().strftime("%H:%M:%S")
     }
     session.get('messages').append(content)
     send(content, to=room)
+    date_time = datetime.strptime(content["date"], "%H:%M:%S")
     content['room_id'] = room
     content['text'] = content['message']
+    content['date'] = date_time
     del(content['message'])
     new_message = Message(**content)
     new_message.save()
+    storage.save()
     print(f"{session.get('name')} said: {data['data']}")
+
 
 
 
@@ -48,11 +56,13 @@ def connect(auth):
 
     join_room(room)
     send({'msg': 'clean'}, to=room)
-    
-    for msg in session.get('messages'):
-        send(msg, to=room)
-    send({"name": name, "message": f"{name} has entered the room"}, to=room)    
-    
+
+    data = requests.get(f'http://127.0.0.1:5500/api/v1/messages/{room}')
+    messages = data.json()
+    for msg in messages:
+        socketio.emit('message', msg, room=room)
+
+    send({"name": name, "message": f"{name} has entered the room"}, to=room)  
     print(f"{name} joined room {room}")
 
 @socketio.on("disconnect")
@@ -71,7 +81,11 @@ def disconnect():
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 
-
+@app.route('/static/js/<path:filename>')
+def custom_static(filename):
+    response = send_from_directory('static/js', filename)
+    response.cache_control.max_age = 0
+    return response
 
 @app.errorhandler(404)
 def not_found_error(error):

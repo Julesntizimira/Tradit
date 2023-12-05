@@ -1,9 +1,10 @@
-from webdynamic.views import app_pages
+from webdynamic0.views import app_pages
 from flask_login import login_required, current_user
 from models import storage
 from models.user import User, Room
 from flask import render_template, abort, session, url_for
 import requests
+from datetime import datetime
 
 
 @app_pages.route('/users', methods=['GET', 'POST'])
@@ -11,8 +12,10 @@ import requests
 def users():
     resp = requests.get('http://127.0.0.1:5500/api/v1/users')
     users = resp.json()
-    return render_template('users.html', users=users)
+    return render_template('users.html', users=users, current_user=current_user)
 
+def get_datetime(item):
+    return datetime.strptime(item["date"], "%H:%M:%S")
 
 @app_pages.route("/room/<user_id>")
 @login_required
@@ -37,12 +40,14 @@ def room(user_id):
     message_objs = user_room.messages
     messages = []
     for obj in message_objs:
-        messages.append({'name': obj.name, 'message': obj.text})
-    
+        time = obj.date.strftime("%H:%M:%S")
+        messages.append({'name': obj.name, 'message': obj.text, 'date': time})
+    sorted_msg = sorted(messages, key=get_datetime)
+
     session["room"] = user_room.id
     session["name"] = current_user.username
-    session['messages'] = messages
-    return render_template("room.html", receiver=user.username, name=session.get("name"), code=user_room.id, messages=session.get('messages'))
+    session["messages"] = sorted_msg
+    return render_template("room.html", receiver=user.username, name=session.get("name"), code=user_room.id, messages=sorted_msg, current_user=current_user)
 
 
 

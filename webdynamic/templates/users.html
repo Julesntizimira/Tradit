@@ -4,10 +4,12 @@
     <div class="dashboard-transparant">
             <div class="user-box">
                 {% for user in users %}
-                <div class="user-name">
-                    <img class="commenter-profile" src="../static/profiles/{{ user['username'] }}.JPG" alt="">
-                    <a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a>
-                </div>
+                {% if user.id != current_user.id %}
+                    <div class="user-name">
+                        <img class="commenter-profile" src="../static/images/{{ user['id'] }}.JPG" alt="">
+                        <a href="{{ url_for('room', user_id=user['id']) }}">{{ user['name'] }}</a>
+                    </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>

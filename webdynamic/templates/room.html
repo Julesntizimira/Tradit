@@ -5,11 +5,11 @@
         <div class="user-profile">
             <div class="user-profile-infos">
                 <div class="user-profile-pic">
-                    <img src="../static/profiles/jules.JPG" alt="">
+                    <img src="../static/images/{{ current_user.id }}.jpg" alt="">
                 </div>
                 <div class="profile-infos">
-                    <div class="profile-name">Ntizimira Mutsinzi Jules</div>
-                    <div class="address">Kigali - Rwanda</div>
+                    <div class="profile-name">{{ current_user.name }}</div>
+                    <div class="address">{{ current_user.address }}</div>
                     <div class="user-books"></div>
                 </div>
             </div>
@@ -28,50 +28,63 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
-    const socket = io();
-    socket.on('message', (data) => {
-        if (data.msg === 'clean') {
-            document.querySelector('.messages').innerHTML = "";
-        } else {
-            CreateMessage(data);
+
+        const socket = io();
+        socket.on('message', (data) => {
+            if (data.msg === 'clean') {
+                document.querySelector('.messages').innerHTML = "";
+            } else {
+                CreateMessage(data);
+            }
+        })
+        function CreateMessage(data) {
+            const p = document.createElement('p');
+            const d = document.createElement('div');
+           
+
+            const span_msg = document.createElement('span')
+            span_msg.innerHTML = `${data.message}`
+
+            const span_username = document.createElement('span')
+            span_username.innerHTML = `${data.name}`
+
+            const t = document.createElement('span')
+            
+       
+            p.innerHTML = span_msg.outerHTML 
+            p.classList.add('msg')
+            
+            if (data.date != null){
+                t.innerHTML = `${data.date}`
+            }
+            t.classList.add('time-position')
+            if (data.name === '{{ name }}') {
+                d.classList.add('sent-message-div')
+                p.classList.add('sent-message-p')
+  
+
+            } else {
+                d.classList.add('received-message-div')
+                p.classList.add('received-message-p')
+  
+            }
+            d.append(t);
+            d.append(p);
+  
+       
+           
+            
+            document.querySelector('.messages').append(d);
         }
-    })
-    function CreateMessage(data) {
-        const p = document.createElement('p');
-        const d = document.createElement('div');
-
-        const span_msg = document.createElement('span')
-        span_msg.innerHTML = `${data.message}`
-
-        const span_username = document.createElement('span')
-        span_username.innerHTML = `${data.name}`
-
-        p.innerHTML = span_msg.outerHTML;
-        p.classList.add('msg')
-        if (data.name === '{{ name }}') {
-            d.classList.add('sent-message-div')
-            p.classList.add('sent-message-p')
-
-        } else {
-            d.classList.add('received-message-div')
-            p.classList.add('received-message-p') 
+        function SendMessage() {
+            const msg = document.querySelector('.input-msg').value;
+            if (msg === '') {
+                return;
+            }
+            socket.send({'data': msg});
+            document.querySelector('.input-msg').value = '';
         }
-        d.append(p);
-        document.querySelector('.messages').append(d);
-    }
-    function SendMessage() {
-        const msg = document.querySelector('.input-msg').value;
-        if (msg === '') {
-            return;
-        }
-        socket.send({'data': msg});
-        document.querySelector('.input-msg').value = '';
-    }
-    for (let msg of store) {
-        CreateMessage(msg);
-    }
 </script>
 
 {% endblock %}

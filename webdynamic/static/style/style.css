@@ -68,24 +68,28 @@
 }
 p.msg{
     color: #fff;
-    padding: 5px;
+    padding: 10px;
     border-radius: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 5px; 
 }
 
 
 .sent-message-p {
     background-color: #4caf50;
     margin-left: 50px;
+    
+    
 }
 
 .received-message-p {
     background-color: #e0e0e0;
     margin-right: 50px;
+   
 }
 
 .sent-message-div {
     font-display: flex;
+
 }
 .received-message-div {
     font-display: flex;
@@ -99,3 +103,7 @@ p.msg{
     background-size: cover;
 }
 
+.time-position {
+    font-size: 12px;
+    font-weight: 500;
+}

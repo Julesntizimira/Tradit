@@ -3,17 +3,25 @@ from api.v1.views import app_views
 from models import storage
 from models.message import Message
 from models.user import User, Room
+from datetime import datetime
 
+
+def get_datetime(item):
+    return datetime.strptime(item["date"], "%H:%M:%S")
 
 @app_views.route('/messages/<room_id>', methods=['GET'], strict_slashes=False)
 def get_messages(room_id):
     '''get a message list'''
     room = storage.get(Room, room_id)
-    messages_list = []
-    messages = room.messages
-    for message in messages:
-        messages_list.append(message.to_dict())
-    return make_response(jsonify(messages_list))
+
+    message_objs = room.messages
+    messages = []
+    for obj in message_objs:
+        time = obj.date.strftime("%H:%M:%S")
+        messages.append({'name': obj.name, 'message': obj.text, 'date': time})
+    sorted_msg = sorted(messages, key=get_datetime)
+    return make_response(jsonify(sorted_msg))
+
 
 @app_views.route('/room/<user1_id>/user2_id>', methods=['GET'], strict_slashes=False)
 def create_room(user1_id, user2_id):
