@@ -17,6 +17,7 @@ from flask_wtf.file import FileField, FileAllowed
 from webdynamic.handleImage import handleImage
 from models.user import User
 from models.wish import Wish
+import json
 
 
 class CommentForm(FlaskForm):
@@ -64,13 +65,16 @@ def book(book_id):
 def registerbook():
     form = BookRegisterForm()
     if form.validate_on_submit():
-        author_data = {'name': form.author.data} 
-        author_resp = requests.post('http://127.0.0.1:5500/api/v1/authors/create', json=author_data)
+        genre_id = None
+        author_id = None
+
+        url = f'http://127.0.0.1:5500/api/v1/author/create/{form.author.data}'
+        author_resp = requests.get(url)
         author = author_resp.json()
         author_id = author.get('id')
         
-        genre_data = {'name': form.genre.data}
-        genre_resp = requests.post('http://127.0.0.1:5500/api/v1/genres/create', json=genre_data)
+        url = f'http://127.0.0.1:5500/api/v1/genre/create/{form.genre.data}'
+        genre_resp = requests.get(url)
         genre = genre_resp.json()
         genre_id = genre.get('id')
 

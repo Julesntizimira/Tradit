@@ -20,7 +20,7 @@ from flask_socketio import join_room, leave_room, send, SocketIO, emit
 import random
 from string import ascii_uppercase
 
-from webdynamic0.handleImage import handleImage
+from webdynamic.handleImage import handleImage
 
 
 from api.v1.views import app_views
