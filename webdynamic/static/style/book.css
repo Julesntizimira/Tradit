@@ -7,6 +7,7 @@
 }
 .book-rep-image {
     max-width: 100%;
+    margin: 20px;
 }
 .book-rep-photo {
     flex: 4;
@@ -50,21 +51,22 @@
     display: flex;
     flex-direction: row;
     font-size: 12px;
+    width: 100%;
+    overflow-x: scroll;
 }
 .book-rep-comments {
     border: 1px solid black;
     border-radius: 10px;
-    height: 60%;
-    min-height: 300px;
+    height: 450px;
     position: relative;
     padding: 20px;
 
 }
 .cont {
-    max-height: 75%;
+    max-height: 70%;
     overflow-y: scroll;
-    border: none;
     padding: 10px;
+    margin-top: 20px;
 }
 .user-box {
     width: 80px;
@@ -87,24 +89,24 @@
     display: flex;
     margin: 10px;
     background-color: white;
-
+    flex-direction: row;
 }
 .input-comment {
     padding: 5px;
     margin-right: 5px;
     border-radius: 8px;
-    border: 1px solid black;
-    width: 65%;
+    width: 330px;
     height: 42px;
+    display: flex;
+    flex-direction: row;
 }
 .swappers {
     font-weight: 500;
     font-size: 16px;
     margin-left: 20px;
+    margin-bottom: 20px;
 }
-
 .comments-box{
-    height: 50px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -123,4 +125,19 @@
     border-radius: 16px;
     color: rgb(104, 104, 104);
     font-size: 14px;
+}
+.username a {
+    text-decoration: none;
+    color: rgb(38, 100, 246)
+}
+.username a:hover {
+    opacity: 0.7;
+}
+.username a:active {
+    opacity: 0.3;
+}
+.wishes-list {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid blue;
 }

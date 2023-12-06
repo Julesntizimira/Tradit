@@ -32,11 +32,7 @@
 
         const socket = io();
         socket.on('message', (data) => {
-            if (data.msg === 'clean') {
-                document.querySelector('.messages').innerHTML = "";
-            } else {
                 CreateMessage(data);
-            }
         })
         function CreateMessage(data) {
             const p = document.createElement('p');
@@ -86,5 +82,12 @@
             document.querySelector('.input-msg').value = '';
         }
 </script>
+{% for msg in messages %}
+<script>
+    data = { 'name': '{{msg.name}}', 'message': '{{ msg.message }}', 'date': '{{ msg.date }}'  }
+    CreateMessage(data)
+</script>
+{% endfor %}
+
 
 {% endblock %}

@@ -27,29 +27,39 @@ def get_user_wishes(user_id):
         wish_list.append(book.to_dict())
     return make_response(jsonify(wish_list))
 
-@app_views.route('/wishes/<book_id>/<user_id>', methods=['POST'], strict_slashes=False)
-def add_to_wishlist(book_id, user_id):
-    ''' add a book from the wish list'''
+@app_views.route('/wishes', methods=['POST'], strict_slashes=False)
+def add_to_wishlist():
+    ''' add or remove a book from the wish list'''
+    data = request.get_json()
+    '''if not data or data.get('user_id') or data.get('book_id'):
+        abort(404, 'Not a json format')'''
+    book_id = data.get('book_id')
+    user_id = data.get('user_id')
     user = storage.get(User, user_id)
     book = storage.get(Book, book_id)
     if not user:
         abort(404, 'user does not exist')
     if not book:
         abort(404, 'book does not exist')
-    wish = Wish(user_id=user_id, book_id=book_id)
-    wish.save()
-    return make_response(201)
+    wishes =  storage.session.query(Wish).join(User).filter(User.id == Wish.user_id and User.id == user.id).join(Book).filter(Book.id == Wish.book_id and Book.id == book_id).all()
+    if wishes:
+        for wish in wishes:
+            storage.delete(wish)
+        return make_response(jsonify(message='Book removed to wishlist'), 201)
+    else:
+        wish = Wish(user_id=user_id, book_id=book_id)
+        wish.save()
+        return make_response(jsonify(message='Book added to wishlist'), 201)
+    
+@app_views.route('/wishes/users/<book_id>', methods=['GET'], strict_slashes=False)
+def get_user_who_wish_book(book_id):
+    '''get users who wish the book'''
+    book = storage.get(Book, book_id)
+    if not book:
+        abort(404, 'user does not exist')
+    wish_list = []
+    wishes = storage.session.query(User).join(Wish).join(Book).filter(Book.id == book_id)
+    for user in wishes:
+        wish_list.append(user.to_dict())
+    return make_response(jsonify(wish_list))
 
-@app_views.route('/wishes/<book_id>/<user_id>', methods=['PUT'], strict_slashes=False)
-def remove_to_wishlist(book_id, user_id):
-    '''remove book from the wish list'''
-    user = storage.get(User, user_id)
-    book = storage.get(Book, book_id)
-    if not user:
-        abort(404, 'user does not exist')
-    if not book:
-        abort(404, 'book does not exist')
-    wish = storage.session.query(Wish).join(Book).filter(Book.id == Wish.book_id).Join(User).filter(Wish.user_id == User.id).first()
-    if wish:
-        storage.delete(wish)
-    return make_response(201)

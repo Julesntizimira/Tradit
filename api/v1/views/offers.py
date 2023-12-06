@@ -27,29 +27,38 @@ def get_user_offers(user_id):
         offer_list.append(book.to_dict())
     return make_response(jsonify(offer_list))
 
-@app_views.route('/offers/<book_id>/<user_id>', methods=['POST'], strict_slashes=False)
-def add_to_offerlist(book_id, user_id):
-    ''' add a book from the offer list'''
+@app_views.route('/offers', methods=['POST'], strict_slashes=False)
+def add_to_offerlist():
+    ''' add or remove a book from the offer list'''
+    data = request.get_json()
+    book_id = data.get('book_id')
+    user_id = data.get('user_id')
     user = storage.get(User, user_id)
     book = storage.get(Book, book_id)
     if not user:
         abort(404, 'user does not exist')
     if not book:
         abort(404, 'book does not exist')
-    offer = Offer(user_id=user_id, book_id=book_id)
-    offer.save()
-    return make_response(201)
+    
+    offers =  storage.session.query(Offer).join(User).filter(User.id == Offer.user_id and User.id == user.id).join(Book).filter(Book.id == Offer.book_id and Book.id == book_id).all()
+    if offers:
+        for offer in offers:
+            storage.delete(offer)
+        return make_response(jsonify(message='Book removed to offerlist'), 201)
+    else:
+        offer = Offer(user_id=user_id, book_id=book_id)
+        offer.save()
+        return make_response(jsonify(message='Book removed to offerlist'),201)
+    
+@app_views.route('/offers/users/<book_id>', methods=['GET'], strict_slashes=False)
+def get_user_who_offer_book(book_id):
+    '''get users who are offering the book'''
+    book = storage.get(Book, book_id)
+    if not book:
+        abort(404, 'user does not exist')
+    offer_list = []
+    offers = storage.session.query(User).join(Offer).join(Book).filter(Book.id == book_id)
+    for user in offers:
+        offer_list.append(user.to_dict())
+    return make_response(jsonify(offer_list))
 
-@app_views.route('/offers/<book_id>/<user_id>', methods=['PUT'], strict_slashes=False)
-def remove_to_offerlist(book_id, user_id):
-    '''remove book from the offer list'''
-    user = storage.get(User, user_id)
-    book = storage.get(Book, book_id)
-    if not user:
-        abort(404, 'user does not exist')
-    if not book:
-        abort(404, 'book does not exist')
-    offer = storage.session.query(Offer).join(Book).filter(Book.id == Offer.book_id).Join(User).filter(Offer.user_id == User.id).first()
-    if offer:
-        storage.delete(offer)
-    return make_response(201)

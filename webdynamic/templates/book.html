@@ -2,7 +2,18 @@
 
 {% block container %}
 <div class="book-container">
-    <div class="book-rep-photo"><img class="book-rep-image" src="../static/book/{{ book.id }}.jpg" alt=""></div>
+    <div class="book-rep-photo">
+        <img class="book-rep-image" src="../static/images/{{ book.id }}.jpg" alt="">
+        <div class="swappers">People who are offering it</div>
+        <div class="users">
+            {% for user in offers %}
+                <div class="user-box">
+                    <img class="user-profile-rep" src="../static/images/{{user.id}}.jpg" alt="">
+                    <p class="username"><a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a></p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
     <div class="book-rep-infos">
         <div class="book-rep-title">{{ book.title }}</div>
         <div class="book-rep-author">{{ author.name }}</div>
@@ -19,37 +30,34 @@
     <div class="book-rep-price-users">
         <div class="swappers">People who want to swap it</div>
         <div class="users">
-            <div class="user-box">
-                <img class="user-profile-rep" src="../static/profiles/jules.jpg" alt="">
-                <p class="username">Julesntizimira</p>
-            </div>
+            {% for user in wishes %}
+                <div class="user-box">
+                    <img class="user-profile-rep" src="../static/images/{{user.id}}.jpg" alt="">
+                    <p class="username"><a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a></p>
+                </div>
+            {% endfor %}
         </div>
+        
         <div class="book-rep-comments">
             <h1>Comments</h1>
             <div class="cont">
                 {% for comment in book.comments %}
                 <div class="comments-box">
-                    <img class="commenter-profile" src="../static/profiles/{{comment.user_id}}.jpg" alt="">
-                    <div class="comment" >diligent and persistent young man who has taken the time to create this inspiring compilation</div>
+                    <img class="commenter-profile" src="../static/images/{{comment.user_id}}.jpg" alt="">
+                    <div class="comment" >{{ comment.text }}</div>
                 </div>
                 {% endfor %}
                 <div class="comment-inputs">
                     <form method="POST" action="">
                         {{ form.hidden_tag() }}
                         <div  class="input-comment">
-                            {{ form.username(class="large", autofocus="") }}
-                        </div>
-                        <div>
+                            {{ form.text(class="large", autofocus="") }}
                             <button class="send-btn" type="submit">Send</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        const book = JSON.parse(document.getElementById('book').getAttribute('bookObj'))
-    </script>
-    
+    </div>    
 </div>
 {% endblock %}

@@ -31,16 +31,18 @@
             <h1>Tradit</h1>
         </div>
         <div class="bar">
-            <div class="home"><a href="{{ url_for('dashboard') }}">HOME</a></div>
-            <div class="about"><a href="{{ url_for('about') }}">ABOUT</a></div>
-            <div class="about"><a href="{{ url_for('about') }}">GENRE</a></div>
-            <div class="about"><a href="{{ url_for('about') }}">SWAP</a></div>
-            <div class="about"><a href="{{ url_for('about') }}">SELL</a></div>
-            <div class="about"><a href="{{ url_for('about') }}">BUY</a></div>
-            <div class="about"><a href="{{ url_for('users') }}">COMMUNITY</a></div>
+            <div class="home"><a href="{{ url_for('app_pages.dashboard') }}">HOME</a></div>
+            <div class="about"><a href="{{ url_for('app_pages.about') }}">ABOUT</a></div>
+            <div class="about"><a href="{{ url_for('app_pages.about') }}">GENRE</a></div>
+            <div class="about"><a href="{{ url_for('app_pages.about') }}">OFFER</a></div>
+            <div class="about"><a href="{{ url_for('app_pages.about') }}">WISH</a></div>
+            <div class="about"><a href="{{ url_for('app_pages.registerbook') }}">ADD Book</a></div>
+            <div class="about"><a href="{{ url_for('app_pages.users') }}">COMMUNITY</a></div>
             <div class="profile-pic">
-              <img src="../static/profiles/{{ current_user.username }}.jpg" alt="">
-              <div class="tooltip"><a class="logout" href="{{ url_for('logout') }}">Logout</a></div>
+              {% if current_user %}
+              <img src="../static/images/{{ current_user.id }}.jpg" alt="">
+              {% endif %}
+              <div class="tooltip"><a class="logout" href="{{ url_for('app_pages.logout') }}">Logout</a></div>
             </div>
             <div class="notification-bar">
                 <img src="../static/icons/notifications.svg" alt="">
@@ -52,9 +54,15 @@
             </div>
         </div>
       </header>
-      <div id="bookListContainer" bookList="{{ books }}"></div>
+      {% if books %}
+      <div id="bookListContainer" bookList="{{ bookList }}"></div>
+      {% endif %}
+      {% if wishList %}
       <div id="wishListContainer" wishList="{{ wishList|tojson|safe }}"></div>
+      {% endif %}
+      {% if offerList %}
       <div id="offerListContainer" offerList="{{ offerList|tojson|safe }}"></div>
+      {% endif %}
       {% block container %}
         <div class="dashboard-container">
             <div class="dashboard-transparant">
@@ -62,7 +70,7 @@
                     <div class="find-text">Find Books</div>
                     <div class="input-btn-search">
                         <input class="search-input" type="text">
-                        <button class="search-btn" onclick="SearchBook()">
+                        <button class="search-btn">
                             <img class="search-icon" src="../static/icons/search.svg" alt="">
                         </button>
                     </div>
@@ -71,29 +79,32 @@
                 <div class="list_title">Offers</div>
                 <div class="grid-container">
                     <div class="grid-row">
-                      <div class="grid-item">
-                        <div class="book-photo-div">
-                          <img class="book-image" src="../static/book/0a491295198e1a3191928da8171890b6@2x.jpg" alt="">
+                      
+                        {% for book in offerList %}
+                        <div class="grid-item">
+                          <div class="book-photo-div">
+                            <img class="book-image" src="../static/images/{{book.id}}.jpg" alt="">
+                          </div>
+                          <div class="book-infos">
+                            <div class="book-title"><a href="{{ url_for('app_pages.book', book_id=book['id']) }}">{{ book.title }}</a></div>
+                            {% for author in authors %}
+                            {% if author.id == book.author_id %}
+                            <div class="book-author">{{ author.name}}</div>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% for genre in genres %}
+                            {% if genre.id == book.genre_id %}
+                            <div class="book-genre">{{ genre.name }}</div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="book-price">
+                              <button id="{{ book.id }}" class="wish-btn">Wish</button>
+                              <button id="{{ book.id }}" class="offer-btn">Offer</button>
+                            </div>
+                          </div>
                         </div>
-                        <div class="book-infos">
-                          <div class="book-title">Business Conquest</div>
-                          <div class="book-author">Ian Dennis</div>
-                          <div class="book-genre">Economics</div>
-                          <div class="book-price">KES 1,200</div>
-                        </div>
-                      </div>
-              
-                      <div class="grid-item">
-                        <div class="book-photo-div">
-                          <img class="book-image" src="../static/book/0a491295198e1a3191928da8171890b6@2x.jpg" alt="">
-                        </div>
-                        <div class="book-infos">
-                          <div class="book-title">Business Conquest</div>
-                          <div class="book-author">Ian Dennis</div>
-                          <div class="book-genre">Economics</div>
-                          <div class="book-price">KES 1,200</div>
-                        </div>
-                      </div>
+                        {% endfor %}
                       
                     </div>
                   </div>
@@ -101,100 +112,159 @@
                   <div class="list_title">WISH LIST</div>
                   <div class="grid-container">
                       <div class="grid-row">
+                        {% for book in wishList %}
                         <div class="grid-item">
                           <div class="book-photo-div">
-                            <img class="book-image" src="../static/book/0a491295198e1a3191928da8171890b6@2x.jpg" alt="">
+                            <img class="book-image" src="../static/images/{{book.id}}.jpg" alt="">
                           </div>
                           <div class="book-infos">
-                            <div class="book-title">Business Conquest</div>
-                            <div class="book-author">Ian Dennis</div>
-                            <div class="book-genre">Economics</div>
-                            <div class="book-price">KES 1,200</div>
+                            <div class="book-title"><a href="{{ url_for('app_pages.book', book_id=book['id']) }}">{{ book.title }}</a></div>
+                            {% for author in authors %}
+                            {% if author.id == book.author_id %}
+                            <div class="book-author">{{ author.name}}</div>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% for genre in genres %}
+                            {% if genre.id == book.genre_id %}
+                            <div class="book-genre">{{ genre.name }}</div>
+                            {% endif %}
+                            {% endfor %}
+                            <div class="book-price">
+                              <button id="{{ book.id }}" class="wish-btn">Wish</button>
+                              <button id="{{ book.id }}" class="offer-btn">Offer</button>
+                            </div>
                           </div>
                         </div>
-                
-                        <div class="grid-item">
-                          <div class="book-photo-div">
-                            <img class="book-image" src="../static/book/0a491295198e1a3191928da8171890b6@2x.jpg" alt="">
-                          </div>
-                          <div class="book-infos">
-                            <div class="book-title">Business Conquest</div>
-                            <div class="book-author">Ian Dennis</div>
-                            <div class="book-genre">Economics</div>
-                            <div class="book-price">KES 1,200</div>
-                          </div>
-                        </div>
-                        
+                        {% endfor %}
                       </div>
                     </div>
             </div>
         </div>
-        <script>
-          const gridContainers = document.querySelectorAll('.grid-container');
-  
-          function handleWheel(event) {
-            const gridRow = event.currentTarget.querySelector('.grid-row');
-            if (event.deltaY > 0) {
-              slideLeft(gridRow);
-            } else {
-              slideRight(gridRow);
-            }
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+        
+        const gridContainers = document.querySelectorAll('.grid-container');
+        function handleWheel(event) {
+          const gridRow = event.currentTarget.querySelector('.grid-row');
+          if (event.deltaY > 0) {
+            slideLeft(gridRow);
+          } else {
+            slideRight(gridRow);
           }
+        }
+        
+        function slideLeft(gridRow) {
+          const firstItem = gridRow.firstElementChild;
+          gridRow.style.transform = `translateX(-${firstItem.offsetWidth + 10}px)`;
+          gridRow.appendChild(firstItem);
+        }
 
-          function slideLeft(gridRow) {
-            const firstItem = gridRow.firstElementChild;
-            gridRow.style.transform = `translateX(-${firstItem.offsetWidth + 10}px)`;
-            gridRow.appendChild(firstItem);
-          }
+        function slideRight(gridRow) {
+          const lastItem = gridRow.lastElementChild;
+          gridRow.style.transform = 'translateX(0)';
+          gridRow.insertBefore(lastItem, gridRow.firstElementChild);
+        }
 
-          function slideRight(gridRow) {
-            const lastItem = gridRow.lastElementChild;
-            gridRow.style.transform = 'translateX(0)';
-            gridRow.insertBefore(lastItem, gridRow.firstElementChild);
-          }
+        gridContainers.forEach(container => {
+          container.addEventListener('wheel', handleWheel);
+        });
 
-          gridContainers.forEach(container => {
-            container.addEventListener('wheel', handleWheel);
-          });
-          /*document.querySelectorAll('.book-title').forEach(bookTitle => {
-            bookTitle.addEventListener('click', () => {
-            window.location.href = "{{ url_for('book') }}";
-          });
-        });*/
+     
+     $(document).ready(function () {
 
-        function SearchBook() {
-            const searched = document.querySelector('.search-input').value;
-            const booksJson = document.getElementById('bookListContainer').getAttribute('bookList');
-            const books = booksJson && booksJson.trim() !== '' ? JSON.parse(booksJson) : [];
+      function SearchBook() {
+        const searched = $('.search-input').val();
+        const result = [];
+        if (!searched) {
+          $('.search-result').empty();
+          return;
+        }
 
-            const result = [];
+        $.ajax({
+            url: 'http://127.0.0.1:5500/api/v1/books',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (data) {
+                const books = data;
 
-            if (searched && books) {
-                const searchedArgs = searched.split(' ');
+                if (searched && books) {
+                    const searchedArgs = searched.split(' ');
 
-                for (let book of books) {
-                    for (let arg of searchedArgs) {
-                        if (book.title.toLowerCase().includes(arg.toLowerCase()) || arg.toLowerCase().includes(book.title.toLowerCase())) {
-                            if (!result.includes(book)) {
-                                result.push(book);
+                    for (let book of books) {
+                        for (let arg of searchedArgs) {
+                            if (book.title.toLowerCase().includes(arg.toLowerCase()) || arg.toLowerCase().includes(book.title.toLowerCase())) {
+                                if (!result.includes(book)) {
+                                    result.push(book);
+                                }
                             }
                         }
                     }
-                }
 
-                document.querySelector('.search-result').innerHTML = '';
-                
-                for (let book of result) {
-                    let a = document.createElement('a');
-                    a.classList.add('search-p');
-                    
-                    a.textContent = book.title;
-                    a.setAttribute('href', '/book/' + book.id);  // Construct the URL directly in JavaScript
+                    $('.search-result').empty();
 
-                    document.querySelector('.search-result').appendChild(a);
+                    for (let book of result) {
+                        let a = $('<a>').addClass('search-p').text(book.title);
+                        a.attr('href', '/book/' + book.id);
+                        $('.search-result').append(a);
+                    }
                 }
+            },
+            error: function (error) {
+                console.error('Error fetching books:', error);
             }
+        });
+      }
+      $('.search-btn').on('click', function(){
+        SearchBook()
+      })
+      $('.search-input').on('input', function () {
+        SearchBook()
+      })
+
+
+      function Wish(book_id) {
+          const data = {
+              'user_id': '{{ current_user.id }}',
+              'book_id': book_id
+          };
+          $.ajax({
+              url: 'http://127.0.0.1:5500/api/v1/wishes',
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify(data),
+              success: function () {
+                  alert('added to wish list');
+              }
+          });
         }
+        function Offer(book_id) {
+            const data = {
+                'user_id': '{{ current_user.id }}',
+                'book_id': book_id
+            };
+            $.ajax({
+                url: 'http://127.0.0.1:5500/api/v1/offers',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function () {
+                    alert('added to wish list');
+                }
+            });
+        }
+
+        $('.wish-btn').on('click', function () {
+            const book_id = $(this).attr('id');
+            Wish(book_id);
+        });
+        $('.offer-btn').on('click', function () {
+            const book_id = $(this).attr('id');
+            Offer(book_id);
+        });
+      });
+
+
 
 
 

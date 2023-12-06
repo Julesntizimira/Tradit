@@ -47,20 +47,19 @@ def message(data):
 
 
 
-
-
 @socketio.on("connect")
 def connect(auth):
     room = session.get("room")
     name = session.get("name")
 
     join_room(room)
-    send({'msg': 'clean'}, to=room)
+    '''send({'msg': 'clean'}, to=room)
 
     data = requests.get(f'http://127.0.0.1:5500/api/v1/messages/{room}')
-    messages = data.json()
-    for msg in messages:
-        socketio.emit('message', msg, room=room)
+    if data:
+        messages = data.json()
+        for msg in messages:
+            socketio.emit('message', msg, room=room)'''
 
     send({"name": name, "message": f"{name} has entered the room"}, to=room)  
     print(f"{name} joined room {room}")
@@ -81,12 +80,6 @@ def disconnect():
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 
-@app.route('/static/js/<path:filename>')
-def custom_static(filename):
-    response = send_from_directory('static/js', filename)
-    response.cache_control.max_age = 0
-    return response
-
 @app.errorhandler(404)
 def not_found_error(error):
     '''not found page'''
@@ -94,4 +87,4 @@ def not_found_error(error):
 
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port='5200', debug=True)
+    socketio.run(app, host='0.0.0.0', port='5200', debug=True,  use_reloader=True)

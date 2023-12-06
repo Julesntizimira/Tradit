@@ -45,7 +45,7 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user, remember=True)
-                return redirect(url_for('app_pages.users'))
+                return redirect(url_for('app_pages.dashboard'))
     return render_template('login.html', form=form)
 
 @app_pages.route('/register', methods=['GET', 'POST'])

@@ -1,4 +1,4 @@
-from webdynamic0.views import app_pages
+from webdynamic.views import app_pages
 from flask_login import login_required, current_user
 from models import storage
 from models.user import User, Room
@@ -10,8 +10,12 @@ from datetime import datetime
 @app_pages.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
-    resp = requests.get('http://127.0.0.1:5500/api/v1/users')
-    users = resp.json()
+    users = []
+    users_resp = requests.get(f'http://127.0.0.1:5500/api/v1/users')
+    userList = users_resp.json()
+    for user in userList:
+        if user['id'] != current_user.id:
+            users.append(user)
     return render_template('users.html', users=users, current_user=current_user)
 
 def get_datetime(item):
@@ -36,7 +40,6 @@ def room(user_id):
 
     if not user_room:
         abort(500)
-
     message_objs = user_room.messages
     messages = []
     for obj in message_objs:

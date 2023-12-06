@@ -5,8 +5,17 @@
         <div class="register-container">
             <div class="register_form">
                 <p class="sign_up-form">Register a new Book</p>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% endwith %}
                 <p class="sign-up-under"></p>
-                <form method="POST" action="">
+                <form method="POST" action="{{ url_for('app_pages.registerbook') }}" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     <div class="field">
                         <div class="control">
@@ -31,6 +40,11 @@
                     <div class="field">
                         <div class="control">
                             {{ form.description(class="large") }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form.file(class="large") }}
                         </div>
                     </div>
                     <button class="form-btn" type="submit">Submit</button>
