@@ -8,6 +8,7 @@ from flask_socketio import SocketIO
 from flask_socketio import join_room, leave_room, send, emit
 from datetime import datetime
 import requests
+from flask_cors import CORS
 
 
 app = Flask(__name__)
@@ -15,6 +16,8 @@ app.config['SECRET_KEY'] = 'thisisasecretkey'
 socketio = SocketIO(app)
 
 app.register_blueprint(app_pages)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "app_pages.login"
