@@ -24,16 +24,17 @@ def get_messages(room_id):
 @app_views.route('/message/create/<room_id>', methods=['POST'], strict_slashes=False)
 def post_message_to_room(room_id):
     room = storage.get(Room, room_id)
-    content = request.get_json()
-    date_time = datetime.strptime(content["date"], "%H:%M:%S")
-    content['room_id'] = room_id
-    content['text'] = content.get('message')
-    content['date'] = date_time
-    del(content['message'])
-    new_message = Message(**content)
-    new_message.save()
-    storage.save()
-    return make_response(jsonify({'status': 'stored'}), 201)
+    if room:
+        content = request.get_json()
+        date_time = datetime.strptime(content["date"], "%H:%M:%S")
+        content['room_id'] = room_id
+        content['text'] = content.get('message')
+        content['date'] = date_time
+        del(content['message'])
+        new_message = Message(**content)
+        new_message.save()
+        storage.save()
+        return make_response(jsonify({'status': 'stored'}), 201)
 
 @app_views.route('/room/create', methods=['POST'], strict_slashes=False)
 def create_room():
@@ -45,6 +46,7 @@ def create_room():
     user2 = storage.get(User, user2_id)
     if not user1 or not user2:
         abort(400, 'user1 or user2 not found')
+    room = None
     for i in user1.rooms:
         if i in user2.rooms:
             room = i
