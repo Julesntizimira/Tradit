@@ -67,23 +67,30 @@ def registerbook():
     if form.validate_on_submit():
         genre_id = None
         author_id = None
-
-        url = f'http://127.0.0.1:5500/api/v1/author/create/{form.author.data}'
-        author_resp = requests.get(url)
-        author = author_resp.json()
+        url = f'http://127.0.0.1:5500/api/v1/author/new/{form.author.data}'
+        resp = requests.post(url)
+        author = resp.json()
         author_id = author.get('id')
-        
-        url = f'http://127.0.0.1:5500/api/v1/genre/create/{form.genre.data}'
-        genre_resp = requests.get(url)
-        genre = genre_resp.json()
+
+        url = f'http://127.0.0.1:5500/api/v1/genre/new/{form.genre.data}'
+        resp = requests.post(url)
+        genre = resp.json()
         genre_id = genre.get('id')
 
         if genre_id and author_id:
-            print(genre_id, author_id)
-            new_book = Book(title=form.title.data, description=form.description.data, release_date=form.release_date.data, author_id=author_id, genre_id=genre_id, user_id=current_user.id)
-            new_book.save()
-            file = form.file.data
-            handleImage(file, new_book.id)
+            data = {'title': form.title.data,
+                    'description': form.description.data,
+                    'release_date': form.release_date.data,
+                    'author_id': author_id,
+                    'genre_id': genre_id,
+                    'user_id': current_user.id
+                    }
+            url = 'http://127.0.0.1:5500/api/v1/book'
+            resp = requests.post(url, json=data)
+            new_book = resp.json()
+            if new_book:
+                file = form.file.data
+                handleImage(file, new_book.get('id'))
             return redirect(url_for('app_pages.dashboard'))
     else:
         for field, errors in form.errors.items():

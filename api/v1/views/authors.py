@@ -21,14 +21,15 @@ def get_author(author_id):
         return make_response(jsonify(author.to_dict()), 201)
     return make_response(jsonify({}), 200)
 
-
-app_views.route('/author/create/<author_name>', methods=['GET'], strict_slashes=False)
-def post_author(author_name):
-    '''post author'''
+@app_views.route('/author/new/<name>', methods=['POST'], strict_slashes=False)
+def add_to_authors(name):
+    '''add to authors'''
     for author in storage.all(Author).values():
-        name = author.name
-        if name.lower() == author_name.lower() or name.lower() in author_name.lower() or author_name.lower() in name.lower():
-            return make_response(jsonify(author.to_dict()))
-    new_author = Author(name=author_name)
+        if author.name.lower() == name.lower():
+            return make_response(jsonify(author.to_dict()), 200)
+    new_author = Author(name=name)
     new_author.save()
-    return make_response(jsonify(new_author.to_dict()))
+    return make_response(jsonify(new_author.to_dict()), 201)
+
+
+

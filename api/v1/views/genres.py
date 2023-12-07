@@ -21,13 +21,12 @@ def get_genre(genre_id):
         return make_response(jsonify(genre.to_dict()), 201)
     return make_response(jsonify({}), 200)
 
-app_views.route('/genre/create/<genre_name>', methods=['GET'], strict_slashes=False)
-def post_genre(genre_name):
-    '''post a genre'''
+@app_views.route('/genre/new/<name>', methods=['POST'], strict_slashes=False)
+def add_to_genres(name):
+    '''add to genre'''
     for genre in storage.all(Genre).values():
-        name = genre.name
-        if name.lower() == genre_name.lower() or name.lower() in genre_name.lower() or genre_name.lower() in name.lower():
-            return make_response(jsonify(genre.to_dict()))
-    new_genre = Genre(name=genre_name)
+        if genre.name.lower() == name.lower():
+            return make_response(jsonify(genre.to_dict()), 200)
+    new_genre = Genre(name=name)
     new_genre.save()
-    return make_response(jsonify(new_genre.to_dict()))
+    return make_response(jsonify(new_genre.to_dict()), 201)

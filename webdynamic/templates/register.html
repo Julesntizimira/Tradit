@@ -6,6 +6,13 @@
             <div class="register_form">
                 <p class="sign_up-form">Register</p>
                 <p class="sign-up-under">Join us in celebrating the joy of reading and the magic of sharing stories</p>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes">
+                        <li>{{ message }}</li>
+                    </ul>
+                {% endif %}
+                {% endwith %}
                 <form method="POST" action="{{ url_for('app_pages.register') }}" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     <div class="field">

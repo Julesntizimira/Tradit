@@ -25,32 +25,23 @@ def get_datetime(item):
 @login_required
 def room(user_id):
     user = storage.get(User, user_id)
-    rooms = current_user.rooms
-    
+    if not user:
+        abort(400, 'user not found')
     user_room = None
-    if rooms:
-        for room in rooms:
-            if room.users and user in room.users:
-                user_room = room
-                break
-
-    if not user_room:
-        user_room = Room(users=[current_user, user], members=2)
-        user_room.save()
+    url = f'http://127.0.0.1:5500/api/v1/room/create'
+    data = {'user1_id': user.id, 'user2_id': current_user.id}
+    room_resp = requests.post(url, json=data)
+    user_room = room_resp.json()
 
     if not user_room:
         abort(500)
-    message_objs = user_room.messages
-    messages = []
-    for obj in message_objs:
-        time = obj.date.strftime("%H:%M:%S")
-        messages.append({'name': obj.name, 'message': obj.text, 'date': time})
-    sorted_msg = sorted(messages, key=get_datetime)
+    room_id = user_room.get('id')
+    resp = requests.get(f'http://127.0.0.1:5500/api/v1/messages/{room_id}')
+    messages = resp.json()
 
-    session["room"] = user_room.id
+    session["room"] = room_id
     session["name"] = current_user.username
-    session["messages"] = sorted_msg
-    return render_template("room.html", receiver=user.username, name=session.get("name"), code=user_room.id, messages=sorted_msg, current_user=current_user)
+    return render_template("room.html", receiver=user.username, name=session.get("name"), code=room_id, messages=messages, current_user=current_user)
 
 
 

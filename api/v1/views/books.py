@@ -62,6 +62,9 @@ def create_book():
     for key in data.keys():
         if key not in book_attr:
             abort(400, description=f"unknown {key}")
+    for book in storage.all(Book).values():
+        if book.title.lower() == data.get('title'):
+            return make_response(jsonify(book.to_dict()), 200)
     new_book = Book(**data)
     new_book.save()
     return make_response(jsonify(new_book.to_dict()), 201)

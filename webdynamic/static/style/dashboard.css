@@ -97,6 +97,7 @@
   .grid-row {
     display: flex;
     transition: transform 0.3s ease;
+    transform-origin: center;
   }
   .grid-item {
     width: 180px;

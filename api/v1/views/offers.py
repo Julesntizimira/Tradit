@@ -39,8 +39,11 @@ def add_to_offerlist():
         abort(404, 'user does not exist')
     if not book:
         abort(404, 'book does not exist')
-    
-    offers =  storage.session.query(Offer).join(User).filter(User.id == Offer.user_id and User.id == user.id).join(Book).filter(Book.id == Offer.book_id and Book.id == book_id).all()
+    offers = []
+    offerList = book.offers
+    for obj in offerList:
+        if obj.user_id == user.id:
+            offers.append(obj)
     if offers:
         for offer in offers:
             storage.delete(offer)

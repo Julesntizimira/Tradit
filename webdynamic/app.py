@@ -17,12 +17,16 @@ socketio = SocketIO(app)
 app.register_blueprint(app_pages)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"
+login_manager.login_view = "app_pages.login"
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return storage.get(User, user_id)
+    url = f'http://127.0.0.1:5500/api/v1/user/{user_id}'
+    resp = requests.get(url)
+    data = resp.json()
+    user = User(**data)
+    return user
 
 
 @socketio.on("message")
@@ -35,15 +39,10 @@ def message(data):
     }
     session.get('messages').append(content)
     send(content, to=room)
-    date_time = datetime.strptime(content["date"], "%H:%M:%S")
-    content['room_id'] = room
-    content['text'] = content['message']
-    content['date'] = date_time
-    del(content['message'])
-    new_message = Message(**content)
-    new_message.save()
-    storage.save()
-    print(f"{session.get('name')} said: {data['data']}")
+    url = f'http://127.0.0.1:5500/api/v1/message/create/{room}'
+    resp = requests.post(url, json=content)
+    if resp.status_code == 201:
+        print(f"{session.get('name')} said: {data.get('data')}")
 
 
 
@@ -53,14 +52,7 @@ def connect(auth):
     name = session.get("name")
 
     join_room(room)
-    '''send({'msg': 'clean'}, to=room)
-
-    data = requests.get(f'http://127.0.0.1:5500/api/v1/messages/{room}')
-    if data:
-        messages = data.json()
-        for msg in messages:
-            socketio.emit('message', msg, room=room)'''
-
+    '''send({'msg': 'clean'}, to=room)'''
     send({"name": name, "message": f"{name} has entered the room"}, to=room)  
     print(f"{name} joined room {room}")
 

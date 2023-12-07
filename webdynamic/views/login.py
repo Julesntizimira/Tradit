@@ -1,5 +1,5 @@
 from webdynamic.views import app_pages
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, IntegerField
@@ -9,6 +9,7 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_bcrypt import Bcrypt
 from models import storage
 from models.user import User
+import requests
 
 bcrypt = Bcrypt()
 
@@ -36,14 +37,22 @@ class RegisterForm(FlaskForm):
             raise ValidationError("that username already exists please choose a different one" )
 
 
+
+
 @app_pages.route('/login', methods=['GET', 'POST'])
 def login():
     '''login page route'''
     form = LoginForm()
     if form.validate_on_submit():
-        user = storage.session.query(User).filter_by(username=form.username.data).first()
-        if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
+        url = 'http://127.0.0.1:5500/api/v1/users/auth'
+        data = {'username': form.username.data, 'password': form.password.data}
+        resp = requests.post(url, json=data)
+
+        if resp.status_code == 200:
+            user_data = resp.json()
+            user = User(**user_data)
+            
+            if bcrypt.check_password_hash(user.password.encode('utf-8'), form.password.data):
                 login_user(user, remember=True)
                 return redirect(url_for('app_pages.dashboard'))
     return render_template('login.html', form=form)
@@ -55,9 +64,20 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password,  name=form.name.data, email=form.email.data, address=form.address.data)
-        new_user.save()
-        file = form.file.data
-        handleImage(file, new_user.id)
-        return redirect(url_for('app_pages.login'))
+        data = {
+            'username' : form.username.data,
+            'password': hashed_password.decode('utf-8'),
+            'name': form.name.data,
+            'email': form.email.data,
+            'address': form.address.data
+            }
+        url = 'http://127.0.0.1:5500/api/v1/user/create'
+        resp = requests.post(url, json=data)
+        if resp.status_code == 201:
+            new_user = resp.json()
+            file = form.file.data
+            handleImage(file, new_user.get('id'))
+            return redirect(url_for('app_pages.login'))
+        else:
+            flash('server error')
     return render_template('register.html', form=form)

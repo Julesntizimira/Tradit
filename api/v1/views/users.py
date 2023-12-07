@@ -9,12 +9,23 @@ user_attr = ['name', 'username', 'email', 'password', 'address']
 
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
-def get_Users():
+def get_users():
     '''get user list'''
     user_list = []
     for user in storage.all('User').values():
         user_list.append(user.to_dict())
     return make_response(jsonify(user_list))
+
+@app_views.route('/users/auth', methods=['POST'], strict_slashes=False)
+def get_users_auth():
+    '''get user list with passwords'''
+    data = request.get_json()
+    for user in storage.all('User').values():
+        if user.username == data.get('username'):
+            user_dict = user.to_dict()
+            user_dict['password'] = user.password
+            return make_response(jsonify(user_dict), 200)
+    return make_response(jsonify({}), 404)
 
 @app_views.route('/user/<user_id>', methods=['GET'], strict_slashes=False)
 def get_user_by_id(user_id):
@@ -38,7 +49,7 @@ def get_user_by_username(username):
         return make_response(jsonify(user_searched.to_dict()), 200)
 
 
-@app_views.route('/user', methods=['POST'], strict_slashes=False)
+@app_views.route('/user/create', methods=['POST'], strict_slashes=False)
 def create_user():
     if not request.get_json():
         abort(400, description="Not a JSON")
@@ -49,6 +60,11 @@ def create_user():
     for key in data.keys():
         if key not in user_attr:
             abort(400, description=f"unknown {key}")
+    for user in storage.all(User).values():
+        if user.username == data.get('username'):
+            abort(400, 'username exists')
+        elif user.email == data.get('email'):
+            abort(400, 'email exists')
     new_user = User(**data)
     new_user.save()
     return make_response(jsonify(new_user.to_dict()), 201)
@@ -92,3 +108,4 @@ def get_user_rooms(user_id):
     for room in user_searched.rooms:
         room_list.append(room.to_dict())
     return make_response(jsonify(room_list))
+    

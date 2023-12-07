@@ -4,6 +4,10 @@
 <div class="book-container">
     <div class="book-rep-photo">
         <img class="book-rep-image" src="../static/images/{{ book.id }}.jpg" alt="">
+        <div>
+            <button id="{{ book.id }}" class="wish-btn">Wish</button>
+            <button id="{{ book.id }}" class="offer-btn">Offer</button>
+        </div>
         <div class="swappers">People who are offering it</div>
         <div class="users">
             {% for user in offers %}
@@ -60,4 +64,50 @@
         </div>
     </div>    
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    function Wish(book_id) {
+        const data = {
+            'user_id': '{{ current_user.id }}',
+            'book_id': book_id
+        };
+        $.ajax({
+            url: 'http://127.0.0.1:5500/api/v1/wishes',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function () {
+                alert(book_id);
+            }
+        });
+    }
+    function Offer(book_id) {
+        const data = {
+            'user_id': '{{ current_user.id }}',
+            'book_id': book_id
+        };
+        $.ajax({
+            url: 'http://127.0.0.1:5500/api/v1/offers',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function () {
+                alert('added to wish list');
+            }
+        });
+    }
+
+    $('.wish-btn').on('click', function () {
+        const book_id = $(this).attr('id');
+        Wish(book_id);
+    });
+    $('.offer-btn').on('click', function () {
+        const book_id = $(this).attr('id');
+        Offer(book_id);
+    });
+    });
+
+</script>
 {% endblock %}

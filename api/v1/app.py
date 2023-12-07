@@ -1,11 +1,16 @@
 from flask import  Flask, render_template, jsonify, make_response
 from api.v1.views import app_views
 from flask_cors import CORS
-
+from models.author import Author
 app = Flask(__name__)
 app.register_blueprint(app_views)
-cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/v1/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
 
+
+@app.route('/api/v1/author/new/<name>', methods=['POST'], strict_slashes=False)
+def add_to_authors(name):
+    new_author = Author(name=name)
+    return make_response(jsonify(new_author.to_dict()), 200)
 
 @app.errorhandler(404)
 def not_found_error(error):

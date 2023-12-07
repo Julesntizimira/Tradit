@@ -13,7 +13,6 @@ def get_datetime(item):
 def get_messages(room_id):
     '''get a message list'''
     room = storage.get(Room, room_id)
-
     message_objs = room.messages
     messages = []
     for obj in message_objs:
@@ -22,10 +21,26 @@ def get_messages(room_id):
     sorted_msg = sorted(messages, key=get_datetime)
     return make_response(jsonify(sorted_msg))
 
+@app_views.route('/message/create/<room_id>', methods=['POST'], strict_slashes=False)
+def post_message_to_room(room_id):
+    room = storage.get(Room, room_id)
+    content = request.get_json()
+    date_time = datetime.strptime(content["date"], "%H:%M:%S")
+    content['room_id'] = room_id
+    content['text'] = content.get('message')
+    content['date'] = date_time
+    del(content['message'])
+    new_message = Message(**content)
+    new_message.save()
+    storage.save()
+    return make_response(jsonify({'status': 'stored'}), 201)
 
-@app_views.route('/room/<user1_id>/user2_id>', methods=['GET'], strict_slashes=False)
-def create_room(user1_id, user2_id):
+@app_views.route('/room/create', methods=['POST'], strict_slashes=False)
+def create_room():
     '''create or get a room between two users'''
+    data = request.get_json()
+    user1_id = data.get('user1_id')
+    user2_id = data.get('user2_id')
     user1 = storage.get(User, user1_id)
     user2 = storage.get(User, user2_id)
     if not user1 or not user2:
@@ -33,7 +48,6 @@ def create_room(user1_id, user2_id):
     for i in user1.rooms:
         if i in user2.rooms:
             room = i
-            break
     if not room:
         room = Room(users=[user1, user2], mmbers=2)
         room.save()

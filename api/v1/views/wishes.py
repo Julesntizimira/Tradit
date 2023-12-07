@@ -41,7 +41,11 @@ def add_to_wishlist():
         abort(404, 'user does not exist')
     if not book:
         abort(404, 'book does not exist')
-    wishes =  storage.session.query(Wish).join(User).filter(User.id == Wish.user_id and User.id == user.id).join(Book).filter(Book.id == Wish.book_id and Book.id == book_id).all()
+    wishes = []
+    wishList = book.wishes
+    for obj in wishList:
+        if obj.user_id == user.id:
+            wishes.append(obj)
     if wishes:
         for wish in wishes:
             storage.delete(wish)
