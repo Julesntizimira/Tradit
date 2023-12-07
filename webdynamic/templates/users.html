@@ -6,7 +6,7 @@
                 {% for user in users %}
                 {% if user.id != current_user.id %}
                     <div class="user-name">
-                        <img class="commenter-profile" src="../static/images/{{ user['id'] }}.JPG" alt="">
+                        <img class="commenter-profile" src="../static/images/{{ user['id'] }}.jpg" alt="">
                         <a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a>
                     </div>
                 {% endif %}

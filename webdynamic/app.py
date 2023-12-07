@@ -13,10 +13,8 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
-socketio = SocketIO(app)
-
+socketio = SocketIO(app, cors_allowed_origins="*")
 app.register_blueprint(app_pages)
-cors = CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
 
 login_manager = LoginManager()
 login_manager.init_app(app)
