@@ -51,6 +51,6 @@ def create_room():
         if i in user2.rooms:
             room = i
     if not room:
-        room = Room(users=[user1, user2], mmbers=2)
+        room = Room(users=[user1, user2], members=2)
         room.save()
     return make_response(jsonify(room.to_dict()), 201)
