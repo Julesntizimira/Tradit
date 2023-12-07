@@ -7,7 +7,7 @@ import requests
 from datetime import datetime
 
 
-@app_pages.route('/users', methods=['GET', 'POST'])
+@app_pages.route('/users', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def users():
     users = []
@@ -21,7 +21,7 @@ def users():
 def get_datetime(item):
     return datetime.strptime(item["date"], "%H:%M:%S")
 
-@app_pages.route("/room/<user_id>")
+@app_pages.route("/room/<user_id>",  methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def room(user_id):
     user = storage.get(User, user_id)

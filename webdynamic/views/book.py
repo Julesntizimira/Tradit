@@ -34,7 +34,7 @@ class BookRegisterForm(FlaskForm):
     file = FileField('file', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
     submit = SubmitField("Register")
 
-@app_pages.route('/book/<book_id>', methods=['GET', 'POST'])
+@app_pages.route('/book/<book_id>', methods=['GET', 'POST'], strict_slashes=False)
 def book(book_id):
     form = CommentForm()
     book = storage.get(Book, book_id)
@@ -60,7 +60,7 @@ def book(book_id):
     return render_template('book.html', book=book, genre=genrename, current_user=current_user, author=authorObj, form=form, wishes=wish_users, offers=offer_users)
 
 
-@app_pages.route('/registerbook', methods=['GET', 'POST'])
+@app_pages.route('/registerbook', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def registerbook():
     form = BookRegisterForm()

@@ -39,7 +39,7 @@ class RegisterForm(FlaskForm):
 
 
 
-@app_pages.route('/login', methods=['GET', 'POST'])
+@app_pages.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login():
     '''login page route'''
     form = LoginForm()
@@ -57,7 +57,7 @@ def login():
                 return redirect(url_for('app_pages.dashboard'))
     return render_template('login.html', form=form)
 
-@app_pages.route('/register', methods=['GET', 'POST'])
+@app_pages.route('/register', methods=['GET', 'POST'], strict_slashes=False)
 def register():
     '''register page route'''
     from webdynamic.handleImage import handleImage

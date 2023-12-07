@@ -10,7 +10,7 @@ from models.genre import Genre
 from models.author import Author
 import json
 
-@app_pages.route('/dashboard', methods=['GET', 'POST'])
+@app_pages.route('/dashboard', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def dashboard():
     books_json = requests.get('http://127.0.0.1:5500/api/v1/books')
@@ -25,6 +25,7 @@ def dashboard():
     offers = offers_json.json()
     genres = []
     authors = []
+    
     genreList = storage.all(Genre).values()
     AuthorList = storage.all(Author).values()
     if genreList:
