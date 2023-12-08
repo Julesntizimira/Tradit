@@ -38,4 +38,8 @@ class Basemodel:
             if "password" in new_dict:
                 del new_dict["password"]
         new_dict.pop("_sa_instance_state", None)
-        return new_dict
+        result = {}
+        for key, value in new_dict.items():
+            if not isinstance(value, (list, Base)):
+                result[key] = value
+        return result

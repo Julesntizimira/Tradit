@@ -28,7 +28,7 @@ class RegisterForm(FlaskForm):
     username = StringField(validators=[input_required(), Length(min=4, max=20)], render_kw={"placeholder":"Username"})
     email = EmailField(validators=[input_required(), Email(message="Invalid email address")], render_kw={"placeholder":"Email"})
     password = PasswordField(validators=[input_required(), Length(min=4, max=20), ], render_kw={"placeholder":"Password"})
-    file = FileField('file', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
+    file = FileField('file', validators=[FileAllowed(['jpg', 'png', 'gif'], 'Images only!')])
     submit = SubmitField("Register")
 
     def validate_username(self, username):
