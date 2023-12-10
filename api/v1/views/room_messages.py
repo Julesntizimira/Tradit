@@ -66,13 +66,20 @@ def get_last_message_of_every_room(user_id):
         for room in user.rooms:
             message_objs = room.messages
             messages = []
+
             for obj in message_objs:
+                receiver_id = None
+                if obj.name == user.username:
+                    for other_user in room.users:
+                        if other_user.id != user.id:
+                            receiver_id = other_user.id
+                            break
                 time = obj.date.strftime("%H:%M:%S")
                 for user_obj in storage.all(User).values():
                     if user_obj.username == obj.name:
                         id = user_obj.id
                         break
-                messages.append({'name': obj.name, 'message': obj.text, 'date': time, 'user_id': id})
+                messages.append({'name': obj.name, 'message': obj.text, 'date': time, 'user_id': id, 'receiver_id': receiver_id})
             sorted_msg = sorted(messages, key=get_datetime)
             if sorted_msg:
                 msg_list.append(sorted_msg[-1])
