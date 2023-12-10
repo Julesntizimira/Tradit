@@ -61,9 +61,9 @@ def get_user_who_wish_book(book_id):
     book = storage.get(Book, book_id)
     if not book:
         abort(404, 'user does not exist')
-    wish_list = []
-    wishes = storage.session.query(User).join(Wish).join(Book).filter(Book.id == book_id)
-    for user in wishes:
-        wish_list.append(user.to_dict())
-    return make_response(jsonify(wish_list))
-
+    wish_list = book.wishes
+    wishes = []
+    for wish in wish_list:
+        user = storage.get(User, wish.user_id)
+        wishes.append(user.to_dict())
+    return make_response(jsonify(wishes))

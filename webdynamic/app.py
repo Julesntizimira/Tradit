@@ -38,14 +38,11 @@ def message(data):
         "message": data["data"],
         "date": datetime.now().strftime("%H:%M:%S")
     }
-    session.get('messages').append(content)
     send(content, to=room)
     url = f'http://127.0.0.1:5500/api/v1/message/create/{room}'
     resp = requests.post(url, json=content)
     if resp.status_code == 201:
         print(f"{session.get('name')} said: {data.get('data')}")
-
-
 
 @socketio.on("connect")
 def connect(auth):
