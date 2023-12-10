@@ -44,17 +44,23 @@ def create_room():
     data = request.get_json()
     user1_id = data.get('user1_id')
     user2_id = data.get('user2_id')
+
     user1 = storage.get(User, user1_id)
     user2 = storage.get(User, user2_id)
+
     if not user1 or not user2:
         abort(400, 'user1 or user2 not found')
-    room = None
-    for i in user1.rooms:
-        if i in user2.rooms:
-            room = i
+
+    # Use session query to filter rooms based on user ids
+    room = storage.session.query(Room).\
+        filter(Room.users.any(User.id == user1_id)).\
+        filter(Room.users.any(User.id == user2_id)).\
+        first()
+
     if not room:
         room = Room(users=[user1, user2], members=2)
         room.save()
+
     return make_response(jsonify(room.to_dict()), 201)
 
 @app_views.route('rooms/user/<user_id>', methods=['GET'], strict_slashes=False)
@@ -68,9 +74,9 @@ def get_last_message_of_every_room(user_id):
         for room in user.rooms:
             message_objs = room.messages
             messages = []
-
             for obj in message_objs:
                 receiver_id = None
+                id = None
                 if obj.name == user.username:
                     for other_user in room.users:
                         if other_user.id != user.id:

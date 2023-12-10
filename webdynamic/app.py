@@ -13,6 +13,15 @@ import requests
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+@app.after_request
+def add_header(response):
+    # Disable caching for all routes
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
 app.register_blueprint(app_pages)
 
 login_manager = LoginManager()
@@ -37,7 +46,7 @@ def message(data):
         "message": data["data"],
         "date": datetime.now().strftime("%H:%M:%S")
     }
-    send(content, to=room)
+    emit("message", content, room=room) 
     url = f'http://127.0.0.1:5500/api/v1/message/create/{room}'
     resp = requests.post(url, json=content)
     if resp.status_code == 201:
