@@ -17,18 +17,17 @@
                 <div class="swappers">Messages</div>
                 <div class="cont">
                     {% for msg in rooms_updates %}
-                    <div class="comments-box">
-                        {% if msg.receiver_id %}
+                    {% if msg.receiver_id %}
+                        <div class="comments-box-sent">
+                            <div class="comment" >{{ msg.message }}</div>
                             <img class="commenter-profile" src="../static/images/{{msg.receiver_id}}.jpg" alt="">
-                            <div class="comment" >
-                                <p class="sent">sent by you</p>
-                                <p>{{ msg.message }}</p>
-                            </div>
-                        {% else %}
+                        </div>
+                    {% else %}
+                        <div class="comments-box">
                             <img class="commenter-profile" src="../static/images/{{msg.user_id}}.jpg" alt="">
                             <div class="comment" >{{ msg.message }}</div>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {endif}
                     {% endfor %}
                 </div>
             </div>
