@@ -35,6 +35,8 @@ def post_message_to_room(room_id):
         new_message.save()
         storage.save()
         return make_response(jsonify({'status': 'stored'}), 201)
+    else:
+        abort(404, 'room not found')
 
 @app_views.route('/room/create', methods=['POST'], strict_slashes=False)
 def create_room():
