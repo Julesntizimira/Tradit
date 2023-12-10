@@ -47,6 +47,7 @@ def room(user_id):
 
     session["room"] = room_id
     session["name"] = current_user.username
+    session["email"] = user.email
     return render_template("room.html", receiver=user.username, name=session.get("name"), code=room_id, messages=messages, current_user=current_user)
 
 
