@@ -48,7 +48,6 @@ def message(data):
 def connect(auth):
     room = session.get("room")
     name = session.get("name")
-
     join_room(room)
     '''send({'msg': 'clean'}, to=room)'''
     send({"name": name, "message": f"{name} has entered the room"}, to=room)  
@@ -59,7 +58,6 @@ def disconnect():
     room = session.get("room")
     name = session.get("name")
     leave_room(room)
-
     the_room = storage.get('Room', room)
     if the_room is not None:
         the_room.members -= 1
