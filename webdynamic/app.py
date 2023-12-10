@@ -8,7 +8,6 @@ from flask_socketio import SocketIO
 from flask_socketio import join_room, leave_room, send, emit
 from datetime import datetime
 import requests
-from flask_cors import CORS
 
 
 app = Flask(__name__)
