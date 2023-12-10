@@ -182,7 +182,7 @@
         }
 
         $.ajax({
-            url: 'http://127.0.0.1:5500/api/v1/books',
+            url: 'http://100.25.222.248:5500/api/v1/books',
             type: 'GET',
             contentType: 'application/json',
             success: function (data) {
@@ -229,7 +229,7 @@
               'book_id': book_id
           };
           $.ajax({
-              url: 'http://127.0.0.1:5500/api/v1/wishes',
+              url: 'http://100.25.222.248:5500/api/v1/wishes',
               type: 'POST',
               contentType: 'application/json',
               data: JSON.stringify(data),
@@ -244,7 +244,7 @@
                 'book_id': book_id
             };
             $.ajax({
-                url: 'http://127.0.0.1:5500/api/v1/offers',
+                url: 'http://100.25.222.248:5500/api/v1/offers',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
