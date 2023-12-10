@@ -16,7 +16,13 @@ def users():
     for user in userList:
         if user['id'] != current_user.id:
             users.append(user)
-    return render_template('users.html', users=users, current_user=current_user)
+   
+    every_room_last_message = []
+    current_user_id = current_user.id
+    resp = requests.get(f'http://127.0.0.1:5500/api/v1/rooms/user/{current_user_id}')
+    every_room_last_message = resp.json()
+
+    return render_template('users.html', users=users, current_user=current_user, rooms_updates=every_room_last_message)
 
 def get_datetime(item):
     return datetime.strptime(item["date"], "%H:%M:%S")

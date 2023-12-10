@@ -54,3 +54,26 @@ def create_room():
         room = Room(users=[user1, user2], members=2)
         room.save()
     return make_response(jsonify(room.to_dict()), 201)
+
+@app_views.route('rooms/user/<user_id>', methods=['GET'], strict_slashes=False)
+def get_last_message_of_every_room(user_id):
+    '''get a last message of every room'''
+    user = storage.get(User, user_id)
+    msg_list = []
+    if not user:
+        abort(404, 'user not found')
+    else:
+        for room in user.rooms:
+            message_objs = room.messages
+            messages = []
+            for obj in message_objs:
+                time = obj.date.strftime("%H:%M:%S")
+                for user_obj in storage.all(User).values():
+                    if user_obj.username == obj.name:
+                        id = user_obj.id
+                        break
+                messages.append({'name': obj.name, 'message': obj.text, 'date': time, 'user_id': id})
+            sorted_msg = sorted(messages, key=get_datetime)
+            if sorted_msg:
+                msg_list.append(sorted_msg[-1])
+        return make_response(jsonify(msg_list), 200)
