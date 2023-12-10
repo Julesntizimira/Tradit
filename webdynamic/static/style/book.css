@@ -115,6 +115,7 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: 20px;
+    margin-right: 50px; 
 }
 .comments-box-sent {
     display: flex;
@@ -136,6 +137,7 @@
     border-radius: 16px;
     color: rgb(104, 104, 104);
     font-size: 14px;
+    width: 100%;
 }
 .username a {
     text-decoration: none;

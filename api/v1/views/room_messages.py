@@ -83,4 +83,5 @@ def get_last_message_of_every_room(user_id):
             sorted_msg = sorted(messages, key=get_datetime)
             if sorted_msg:
                 msg_list.append(sorted_msg[-1])
-        return make_response(jsonify(msg_list), 200)
+        ordered_msg = sorted(msg_list, key=get_datetime, reverse=True)
+        return make_response(jsonify(ordered_msg), 200)

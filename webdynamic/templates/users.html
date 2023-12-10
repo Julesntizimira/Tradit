@@ -7,7 +7,7 @@
                 {% for user in users %}
                 {% if user.id != current_user.id %}
                     <div class="user-name">
-                        <img class="commenter-profile" src="../static/images/{{ user['id'] }}.jpg" alt="">
+                        <img href="" class="commenter-profile" src="../static/images/{{ user['id'] }}.jpg" alt="">
                         <a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a>
                     </div>
                 {% endif %}
@@ -20,14 +20,18 @@
                     {% if msg.receiver_id %}
                         <div class="comments-box-sent">
                             <div class="comment" >{{ msg.message }}</div>
-                            <img class="commenter-profile" src="../static/images/{{msg.receiver_id}}.jpg" alt="">
+                            <a href="{{ url_for('app_pages.room', user_id=msg.receiver_id) }}">
+                                <img class="commenter-profile" src="../static/images/{{msg.receiver_id}}.jpg" alt="">
+                            </a>
                         </div>
                     {% else %}
                         <div class="comments-box">
-                            <img class="commenter-profile" src="../static/images/{{msg.user_id}}.jpg" alt="">
+                            <a href="{{ url_for('app_pages.room', user_id=msg.user_id) }}">
+                                <img class="commenter-profile" src="../static/images/{{msg.user_id}}.jpg" alt="">
+                            </a>
                             <div class="comment" >{{ msg.message }}</div>
                         </div>
-                    {endif}
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
