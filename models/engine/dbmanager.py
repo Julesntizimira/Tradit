@@ -27,7 +27,7 @@ class Dbmanager:
     __engine = None
     __session = None
     def __init__(self):
-        self.__engine = create_engine('mysql+mysqlconnector://jules:mypassword@localhost:3306/bookdb')
+        self.__engine = create_engine('mysql+mysqlconnector://jules:mypassword@localhost:3306/bookdb', isolation_level='READ COMMITTED')
 
     def all(self, cls=None):
         """query on the current database session"""
