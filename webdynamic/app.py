@@ -46,6 +46,13 @@ def message(data):
         "message": data["data"],
         "date": datetime.now().strftime("%H:%M:%S")
     }
+    send({'msg': 'clean'}, to=room)
+
+    resp = requests.get(f'http://127.0.0.1:5500/api/v1/messages/{room}')
+    messages = resp.json()
+    for msg in messages:
+        emit("message", msg, room=room) 
+        
     emit("message", content, room=room) 
     url = f'http://127.0.0.1:5500/api/v1/message/create/{room}'
     resp = requests.post(url, json=content)
@@ -56,8 +63,15 @@ def message(data):
 def connect(auth):
     room = session.get("room")
     name = session.get("name")
+
     join_room(room)
-    '''send({'msg': 'clean'}, to=room)'''
+    send({'msg': 'clean'}, to=room)
+
+    resp = requests.get(f'http://127.0.0.1:5500/api/v1/messages/{room}')
+    messages = resp.json()
+    for msg in messages:
+        emit("message", msg, room=room) 
+
     send({"name": name, "message": f"{name} has entered the room"}, to=room)  
     print(f"{name} joined room {room}")
 

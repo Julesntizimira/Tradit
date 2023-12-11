@@ -16,7 +16,6 @@ def users():
     for user in userList:
         if user['id'] != current_user.id:
             users.append(user)
-   
     every_room_last_message = []
     current_user_id = current_user.id
     resp = requests.get(f'http://127.0.0.1:5500/api/v1/rooms/user/{current_user_id}')
@@ -42,13 +41,10 @@ def room(user_id):
     if not user_room:
         abort(500)
     room_id = user_room.get('id')
-    resp = requests.get(f'http://127.0.0.1:5500/api/v1/messages/{room_id}')
-    messages = resp.json()
-
     session["room"] = room_id
     session["name"] = current_user.username
     session["email"] = user.email
-    return render_template("room.html", receiver=user.username, name=session.get("name"), code=room_id, messages=messages, current_user=current_user)
+    return render_template("room.html", receiver=user.username, name=session.get("name"), code=room_id, current_user=current_user)
 
 
 

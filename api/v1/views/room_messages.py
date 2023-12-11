@@ -33,7 +33,6 @@ def post_message_to_room(room_id):
         del(content['message'])
         new_message = Message(**content)
         new_message.save()
-        storage.save()
         return make_response(jsonify({'status': 'stored'}), 201)
     else:
         abort(404, 'room not found')
