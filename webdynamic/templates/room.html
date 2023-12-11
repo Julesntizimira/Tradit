@@ -33,7 +33,7 @@ integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0s
 crossorigin="anonymous"
 ></script>
 <script type="text/javascript">
-    const socket = io('ws://127.0.0.1', { transports: ['websocket', 'polling'] });
+    const socket = io('ws://100.25.222.248', { transports: ['websocket', 'polling'] });
         socket.on('message', (data) => {
             if (data.msg == 'clean') {
                 document.querySelector('.messages').value = ''
