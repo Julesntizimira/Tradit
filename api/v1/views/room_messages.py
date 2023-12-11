@@ -1,3 +1,4 @@
+'''room and message Api'''
 from flask import jsonify, make_response, abort, request, abort
 from api.v1.views import app_views
 from models import storage
@@ -23,6 +24,7 @@ def get_messages(room_id):
 
 @app_views.route('/message/create/<room_id>', methods=['POST'], strict_slashes=False)
 def post_message_to_room(room_id):
+    '''post message Api'''
     room = storage.get(Room, room_id)
     if room:
         content = request.get_json()

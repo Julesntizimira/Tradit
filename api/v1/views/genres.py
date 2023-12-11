@@ -1,8 +1,8 @@
+'''genres Api'''
 from flask import jsonify, make_response, abort, request
 from api.v1.views import app_views
 from models import storage
 from models.genre import Genre
-
 
 
 @app_views.route('/genres', methods=['GET'], strict_slashes=False)

@@ -44,17 +44,12 @@ def login():
     '''login page route'''
     form = LoginForm()
     if form.validate_on_submit():
-        url = 'http://127.0.0.1:5500/api/v1/users/auth'
-        data = {'username': form.username.data, 'password': form.password.data}
-        resp = requests.post(url, json=data)
-
-        if resp.status_code == 200:
-            user_data = resp.json()
-            user = User(**user_data)
-            
-            if bcrypt.check_password_hash(user.password.encode('utf-8'), form.password.data):
-                login_user(user, remember=True)
-                return redirect(url_for('app_pages.dashboard'))
+        for obj in storage.all(User).values():
+            if obj.username == form.username.data:
+                user = obj
+        if bcrypt.check_password_hash(user.password.encode('utf-8'), form.password.data):
+            login_user(user, remember=True)
+            return redirect(url_for('app_pages.dashboard'))
     return render_template('login.html', form=form)
 
 @app_pages.route('/register', methods=['GET', 'POST'], strict_slashes=False)
@@ -71,13 +66,9 @@ def register():
             'email': form.email.data,
             'address': form.address.data
             }
-        url = 'http://127.0.0.1:5500/api/v1/user/create'
-        resp = requests.post(url, json=data)
-        if resp.status_code == 201:
-            new_user = resp.json()
-            file = form.file.data
-            handleImage(file, new_user.get('id'))
-            return redirect(url_for('app_pages.login'))
-        else:
-            flash('server error')
+        new_user = User(**data)
+        new_user.save()
+        file = form.file.data
+        handleImage(file, new_user.id)
+        return redirect(url_for('app_pages.login'))
     return render_template('register.html', form=form)

@@ -1,3 +1,4 @@
+'''comment Api'''
 from flask import jsonify, make_response, abort, request, abort
 from api.v1.views import app_views
 from models import storage
@@ -24,4 +25,4 @@ def add_comment():
     text = data.get('text')
     comment = Comment(user_id=user_id, book_id=book_id, text=text)
     comment.save()
-    return make_response(201)
+    return make_response(jsonify({}), 201)

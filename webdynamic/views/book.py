@@ -1,4 +1,4 @@
-
+'''defines the book and register book view'''
 from webdynamic.views import app_pages
 from flask_login import login_required, current_user, logout_user
 from models import storage
@@ -8,24 +8,22 @@ from models.comment import Comment
 from models.genre import Genre
 from flask import render_template, abort, session, url_for, redirect, flash
 import requests
-from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, IntegerField
-from wtforms.validators import input_required, Length, ValidationError, Email
-from flask_login import login_user, login_required, logout_user, current_user
+from wtforms import StringField, SubmitField, IntegerField
+from wtforms.validators import input_required, Length
+from flask_login import login_required, current_user
 from flask_wtf.file import FileField, FileAllowed
 from webdynamic.handleImage import handleImage
-from models.user import User
-from models.wish import Wish
-import json
+
 
 
 class CommentForm(FlaskForm):
+    '''Comment form'''
     text = StringField(validators=[input_required(), Length(max=500)], render_kw={"placeholder":"Type you comment"})
     submit = SubmitField("book")
 
-
 class BookRegisterForm(FlaskForm):
+    '''book registration Form'''
     title  = StringField(validators=[input_required()], render_kw={"placeholder":"Title"})
     release_date = IntegerField(validators=[input_required()], render_kw={"placeholder":"Release date"})
     author = StringField(validators=[input_required(), Length(max=60)], render_kw={"placeholder":"Author"})
@@ -36,6 +34,7 @@ class BookRegisterForm(FlaskForm):
 
 @app_pages.route('/book/<book_id>', methods=['GET', 'POST'], strict_slashes=False)
 def book(book_id):
+    '''return book view'''
     form = CommentForm()
     book = storage.get(Book, book_id)
     wishes_json = requests.get(f'http://127.0.0.1:5500/api/v1/wishes/users/{book_id}')
@@ -56,13 +55,13 @@ def book(book_id):
         comment = Comment(text=form.text.data, user_id=current_user.id, book_id=book_id)
         comment.save()
         return redirect(url_for('app_pages.book', book_id=book_id))
-    
     return render_template('book.html', book=book, genre=genrename, current_user=current_user, author=authorObj, form=form, wishes=wish_users, offers=offer_users)
 
 
 @app_pages.route('/registerbook', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def registerbook():
+    '''return book registration view'''
     form = BookRegisterForm()
     if form.validate_on_submit():
         genre_id = None

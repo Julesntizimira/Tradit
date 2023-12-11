@@ -1,7 +1,7 @@
-from flask import  Flask, render_template, jsonify, make_response
+'''hold app to serve Apis'''
+from flask import  Flask, jsonify, make_response
 from api.v1.views import app_views
 from flask_cors import CORS
-from models.author import Author
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
@@ -23,7 +23,6 @@ def not_found_error(error):
         description: a resource was not found
     """
     return make_response(jsonify({'error': "Not found"}), 404)
-
 
 
 if __name__ == '__main__':

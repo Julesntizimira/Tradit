@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+'''console application module'''
 import cmd
 import models
 from models import storage

@@ -1,11 +1,10 @@
 
+'''defines the home view'''
 from webdynamic.views import app_pages
 from flask_login import login_required, current_user, logout_user
 from models import storage
-from models.user import User, Room
 from flask import render_template, abort, session, url_for, redirect
 import requests
-from datetime import datetime
 from models.genre import Genre
 from models.author import Author
 import json
@@ -13,6 +12,7 @@ import json
 @app_pages.route('/dashboard', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def dashboard():
+    '''return the home view'''
     books_json = requests.get('http://127.0.0.1:5500/api/v1/books')
     books = books_json.json()
 

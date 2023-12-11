@@ -1,10 +1,10 @@
+'''users Api'''
 from flask import jsonify, make_response, abort, request
 from api.v1.views import app_views
 from models import storage
 from models.user import User
 
-
-
+# a list to hold user class attributes
 user_attr = ['name', 'username', 'email', 'password', 'address']
 
 
@@ -51,6 +51,7 @@ def get_user_by_username(username):
 
 @app_views.route('/user/create', methods=['POST'], strict_slashes=False)
 def create_user():
+    '''post user'''
     if not request.get_json():
         abort(400, description="Not a JSON")
     data = request.get_json()
@@ -72,6 +73,7 @@ def create_user():
 
 @app_views.route('/user/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user_infos(user_id):
+    ''' Put user '''
     if not request.get_json():
         abort(400, description="Not a JSON")
     data = request.get_json()
@@ -90,6 +92,7 @@ def update_user_infos(user_id):
 
 @app_views.route('/user/<user_id>', methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id):
+    ''' delete user '''
     user_searched = storage.get(User, user_id)
     if user_searched is None:
         abort(404, description="Not found")
