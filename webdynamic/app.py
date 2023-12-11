@@ -8,11 +8,12 @@ from flask_socketio import SocketIO
 from flask_socketio import join_room, leave_room, send, emit
 from datetime import datetime
 import requests
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
-socketio = SocketIO(app, cors_allowed_origins="*")
+
 
 @app.after_request
 def add_header(response):
@@ -23,6 +24,7 @@ def add_header(response):
     return response
 
 app.register_blueprint(app_pages)
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -37,7 +39,7 @@ def load_user(user_id):
     user = User(**data)
     return user
 
-
+'''
 @socketio.on("message")
 def message(data):
     room = session.get("room")
@@ -89,7 +91,7 @@ def disconnect():
     
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
-
+'''
 @app.errorhandler(404)
 def not_found_error(error):
     '''not found page'''
@@ -97,4 +99,4 @@ def not_found_error(error):
 
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port='5200', debug=True,  use_reloader=True)
+    app.run(host='0.0.0.0', port='5200', debug=True,  use_reloader=True)

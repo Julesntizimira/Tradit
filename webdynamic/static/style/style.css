@@ -36,11 +36,12 @@
 }
 
 .messages {
-    max-height: 380px;
+    max-height: 370px;
     overflow-y: auto;
 }
 .inputs{
     margin: 5px;
+    margin-top: 10px;
     margin-bottom: 10px;
     position: absolute;
     bottom: 0;
