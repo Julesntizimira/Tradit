@@ -38,6 +38,15 @@ Read the blog post: [Tradit: Swap Books — Share the Joy](https://medium.com/@n
 
 Take a tour of the deployed version at [Tradit](https://julesntizimira.github.io/Tradit/).
 
+Here is a little preview of our main feature, the dashboard:
+
+![dashboard](./landingImages/dashboard.png)
+
+Here is a preview for the chat room page:
+
+![chat room](./landingImages/chatroom.png)
+
+
 ## Known Bugs
 
 - The app is slow due to pictures being saved on the server
