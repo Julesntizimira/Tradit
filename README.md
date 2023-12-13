@@ -1,7 +1,5 @@
 # Tradit - Empowering Book Enthusiasts through Shared Reading
 
-![Tradit Logo](https://i.imgur.com/zg49V5K.png)
-
 ## Introduction
 
 ### The Project
@@ -40,14 +38,6 @@ Read the blog post: [Tradit: Swap Books — Share the Joy](https://medium.com/@n
 
 Take a tour of the deployed version at [Tradit](https://julesntizimira.github.io/Tradit/).
 
-Explore the main feature, the dashboard:
-
-![Tradit Dashboard](landingImages/Screenshot 2023-12-08 at 00.21.53.png)
-
-User chatroom flow on Tradit:
-
-![User Chatroom Flow](https://i.imgur.com/hRxU79B.jpg)
-
 ## Known Bugs
 
 - The app is slow due to pictures being saved on the server
@@ -76,11 +66,11 @@ These components define the user experience in Tradit, with each component housi
 
 ## Authentication
 
-I had to learn Flask-Login to implement login management functionalities. The login manager handles user login, taking advantage of its other features, such as using the current user.
+Implementing a robust authentication system was a pivotal aspect of Tradit's development. To achieve this, I delved into learning Flask-Login, a tool that streamlined the management of user logins. Flask-Login not only facilitated a secure and seamless login experience but also provided valuable functionalities such as handling the current user. By leveraging this technology, Tradit ensures that user authentication is not just a procedural step but a feature that enhances the overall user experience.
 
 ## Socket Chat Rooms
 
-Tradit provides real-time live chat between users, facilitating communication. If a user likes a book, they can chat with the owner.
+Real-time communication is at the heart of Tradit's user interaction, and this is made possible through the implementation of socket chat rooms. These chat rooms offer users a secure and dynamic environment to engage in live conversations. When a user expresses interest in a particular book, the chat room becomes the conduit for direct communication with the owner, allowing them to finalize the details of the book exchange securely. The integration of socket chat rooms adds a layer of immediacy and interactivity, making Tradit more than just a platform for book exchange but a community where users can connect effortlessly.
 
 # Acknowledgments
 
