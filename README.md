@@ -1,7 +1,5 @@
 #  ~ *Swap Books - Share the fun*
 
-![logo](https://i.imgur.com/zg49V5K.png)
-
 # Introduction
 
 ## The Project
@@ -17,10 +15,26 @@ I am a passionate coder who enjoys bringing a creative touch to projects. Here's
 
 Follow me on Twitter for more tech related awesomeness!
 
+## User Stories
+
+As a book enthusiast
+I want to discover a platform for exchanging books
+So that I can exchange my read books for new ones without incurring additional costs**
+
+### Acceptance Criteria:
+- As a user, I should be able to create a profile on the platform.
+- I should be able to browse through a diverse range of available books.
+- I want to search for specific books by title, author, or genre.
+- Upon finding a book of interest, I should be able to view details such as book author, genre and user reviews.
+- I need the option to propose a book exchange by offering one of my owned books.
+- I want to be notified when someone expresses interest in one of my books for an exchange.
+- Upon confirmation, I should be provided with a secure channel for communication with the other party to finalise the exchange details.
+
+
 ## Blog posts
 After the development phase, i wrote a blog post to reflect on the tradit journey.
 
-* Marc's article: [PuppR: It’s Like Tinder For Dogs](https://medium.com/@mcavigli/puppr-its-like-tinder-for-dogs-c498bf4bdd9b)
+[tradit: Swap Books — Share the Joy](https://medium.com/@ntizimijules5/swap-books-share-the-joy-229b658b00fb)
 
 # Tutorial
 
@@ -29,9 +43,9 @@ After the development phase, i wrote a blog post to reflect on the tradit journe
 
 Here is a little preview of our main feature, the dashboard:
 
-![swiping](./landingImages/Screenshot_2023-12-08_at_00.21.53.png)
+![swiping](landingImages/Screenshot 2023-12-08 at 00.21.53.png)
 
-Here is a simple flow for the user experience on PuppR:
+Here is a simple flow for the user chatroom on PuppR:
 
 ![user-flow](https://i.imgur.com/hRxU79B.jpg)
 
@@ -44,8 +58,6 @@ Here is a simple flow for the user experience on PuppR:
 ## Overview
 web app consists of Python and MySQL on the backend, Flask as the framework interface, and HTML/CSS and Javascript for frontend functionalities. Nginx manage the server side and served by gunicorn application server. Beside i created another app for Api, Both apps are running on different ports. for some functionalities the main app access the server directly but for others it uses api
 
-
-![infra](https://i.imgur.com/fSbo6ho.jpg)
 
 ### List of components
 
@@ -83,6 +95,5 @@ the app provide realtime live chat between users, to facilitate communication, i
 
 * [Simple Shell](https://github.com/Julesntizimira/simple_shell): a command line interpreter that replicates the sh program.
 
-# License
 
-MIT License
+
