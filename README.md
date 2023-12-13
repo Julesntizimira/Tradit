@@ -83,11 +83,10 @@ These components make up what a user experiences when they check out **Tradit**.
 |-----------|-------------|
 | [Landing.vue](./src/components/Landing.vue) | The landing page a user sees when they navigate to **PuppR**. |
 | [Login.vue](./src/components/Login.vue)   | The login page. There's a link to go to the Signup page if a user hasn't signed up. |
-| [Matches.vue](./src/components/Matches.vue) | Page where users can see the other users they've matched with. A match occurs when two users have liked each other. |
-| [Navbar.vue](./src/components/Navbar.vue) | The navigation bar that appears at the top of most every other component |
-| [Settings.vue](./src/components/Settings.vue) | Users can change their email address, display name, city, and zip code on this page. |
+| [users.vue](./src/components/Matches.vue) | Page where users can see the other users they've matched with. A match occurs when two users have liked each other. |
+| [room.vue](./src/components/Navbar.vue) | The navigation bar that appears at the top of most every other component |
 | [Signup.vue](./src/components/Signup.vue) | Signup page for users who do not have an account. It asks for a valid email address and for them to make and confirm a password. |
-| [Swiping.vue](./src/components/Swiping.vue) | The main page of **PuppR** where users can see another user's profile and choose whether to 'like' or 'pass.' |
+| [book.vue](./src/components/Swiping.vue) | The main page of **PuppR** where users can see another user's profile and choose whether to 'like' or 'pass.' |
 | [UserProfile.vue](./src/components/UserProfile.vue) | Similar to Settings.vue, on this page the user can change their dog's information including likes, dislikes, and fun facts. |
 
 ## Firebase
