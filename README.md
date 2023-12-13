@@ -29,7 +29,7 @@ After the development phase, i wrote a blog post to reflect on the tradit journe
 
 Here is a little preview of our main feature, the dashboard:
 
-![swiping](./public/icons/browse_no_text.png)
+![swiping](./landingImages/Screenshot_2023-12-08_at_00.21.53.png)
 
 Here is a simple flow for the user experience on PuppR:
 
@@ -42,7 +42,7 @@ Here is a simple flow for the user experience on PuppR:
 # Architecture
 
 ## Overview
-web app consists of Python and MySQL on the backend, Flask as the framework interface, and HTML/CSS and Javascript for frontend functionalities. Nginx manage the server side and served by gunicorn application server. Beside i created 
+web app consists of Python and MySQL on the backend, Flask as the framework interface, and HTML/CSS and Javascript for frontend functionalities. Nginx manage the server side and served by gunicorn application server. Beside i created another app for Api, Both apps are running on different ports. for some functionalities the main app access the server directly but for others it uses api
 
 
 ![infra](https://i.imgur.com/fSbo6ho.jpg)
