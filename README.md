@@ -81,13 +81,13 @@ These components make up what a user experiences when they check out **Tradit**.
 
 | Component | Description |
 |-----------|-------------|
-| [Landing.vue](./webdynamic/Landing.vue) | The landing page a user sees when they navigate to **PuppR**. |
-| [Login.](./webdynamic/templates/login.html)   | The login page. There's a link to go to the Signup page if a user hasn't signed up. |
-| [users.vue](./src/components/Matches.vue) | Page where users can see the other users they've matched with. A match occurs when two users have liked each other. |
-| [room.vue](./src/components/Navbar.vue) | The navigation bar that appears at the top of most every other component |
-| [Signup.vue](./src/components/Signup.vue) | Signup page for users who do not have an account. It asks for a valid email address and for them to make and confirm a password. |
-| [book.vue](./src/components/Swiping.vue) | The main page of **PuppR** where users can see another user's profile and choose whether to 'like' or 'pass.' |
-| [UserProfile.vue](./src/components/UserProfile.vue) | Similar to Settings.vue, on this page the user can change their dog's information including likes, dislikes, and fun facts. |
+| [index](./webdynamic/Landing.vue) | The landing page a user sees when they navigate to **Tradit**. |
+| [Login](./webdynamic/templates/login.html)   | The login page. There's a link to go to the Signup page if a user hasn't signed up. |
+| [Community](./webdynamic/templates/users.html) | Page where users can see the other users. |
+| [chat room](./webdynamic/templates/room.html) | The chat room page where users can have a secure conversation  |
+| [Signup](./webdynamic/templates/register.html) | Signup page for users who do not have an account. It asks for a name, username, email, address, and a profile photo upload |
+| [dashboad](./webdynamic/templates/book.html) | The main page of **Tradit** where users can go through available books in wishlist and offer list. you can even search  |
+| [about](./webdynamic/templates/book.html) | about page where you can visit and get additional informations about the pratform |
 
 ## Firebase
 We decided to go with Firebase for our backend/database as it provides all the functionality we need to develop this project such as authentication, database storage, and cloud storage. As a non-relational database, it made calling any required information simple.
