@@ -59,7 +59,7 @@ When you are finished simply go back to your terminal and hit `ctrl + c` to quit
 # Architecture
 
 ## Overview
-web app consists of Python and MySQL on the backend, Flask as the framework interface, and HTML/CSS and Javascript for frontend functionalities. Nginx manage the server side and served by gunicorn application server. 
+web app consists of Python and MySQL on the backend, Flask as the framework interface, and HTML/CSS and Javascript for frontend functionalities. Nginx manage the server side and served by gunicorn application server. Beside i created 
 
 
 ![infra](https://i.imgur.com/fSbo6ho.jpg)
@@ -88,42 +88,28 @@ These components make up what a user experiences when they check out **Tradit**.
 | [Signup](./webdynamic/templates/register.html) | Signup page for users who do not have an account. It asks for a name, username, email, address, and a profile photo upload |
 | [dashboad](./webdynamic/templates/book.html) | The main page of **Tradit** where users can go through available books in wishlist and offer list. you can even search  |
 | [about](./webdynamic/templates/book.html) | about page where you can visit and get additional informations about the pratform |
+| [register book](./webdynamic/templates/registerb.html) | where user can register new book |
 
-## Firebase
-We decided to go with Firebase for our backend/database as it provides all the functionality we need to develop this project such as authentication, database storage, and cloud storage. As a non-relational database, it made calling any required information simple.
+## authentication 
+I had to learn flask-login to use login management functionalities, everytime the user is loged in the login manager handles it, and i took advantage on it's other functionalities like using current user
 
-Firebase was incredibly helpful while we were testing as it allowed us to look through each user's collection of information. This was helpful while we were implementing the logic for user likes and matches.
+## socket chat rooms
+the app provide realtime live chat between users, to facilitate communication, if a user like the book he can chat with the owner  
 
-### Firestore
-Since our app requires frequent and numerous database calls, Firestore provides a reliable and responsive solution to achieve a seamless experience. Practically all user information, such as display name, dog info, and even their like/match lists are kept in the Firestore. This lets us quickly populate each vue with relevant information.
-
-For instance, when a user logs in they'll be taken to the main [Swiping](./src/components/Swiping.vue) component where another user's image, dog name, age, and location will be dispalyed. They can choose to 'like' or 'pass' the dog, which will immediately populate with another dog's information. Firebase's quick database calls populate this information and help keep this functionality snappy.
-
-Images are kept in the Firestore as a link to where they're held in cloud storage. 
-### Authentication
-As our app connects people and their dogs, authentication is a necessity. Firebase provides a straightforward and easy-to-implement solution so we can focus on designing an accessible app. Users simply sign up with an existing email address and a password of their choice. Firebase Authentication does the heavy lifting to make sure users are authentic.
-### Cloud Firestore
-The obvious choice for storing users' dog photos. It provides straightforward implementation for users to upload their photo and a relatively quick way to call and display these images for users to sift through.
 
 # Acknowledgments
 
-* Holberton School staff - For the help, advice and resources they provided us with during this project and during all our curriculum.
+* ALX staff - For the help, advice and resources they provided us with during this project and during all our curriculum.
 
-* Cohort 8 and all Holberton students - For your friendship, invaluable support, and insight not only for this project, but over the last year.
-
-* Our dogs (or friends' dogs) - For the inspiration, courage and love they brought us when we were working hard and tired.
-
-* Romain Bonhomme - For his incredible Vue.js knowledge and overall front-end good practices.
-
-* Valentin Roudge - For his help and advice in Node.js and architecture best practices.
+* Cohort 13 and all Alx students - For your friendship, invaluable support, and insight not only for this project, but over the last year.
 
 * YOU - For reading this documentation and testing out **PuppR**. We hope you enjoyed the ride!
 
 # Related projects
 
-* [AirBnB Clone](https://github.com/lroudge/AirBnB_clone_v4): a simple web app made in Python, Flask, and JQuery.
+* [AirBnB Clone](https://github.com/Julesntizimira/AirBnB_clone_v4): a simple web app made in Python, Flask, and JQuery.
 
-* [Simple Shell](https://github.com/scurry222/simple_shell): a command line interpreter that replicates the sh program.
+* [Simple Shell](https://github.com/Julesntizimira/simple_shell): a command line interpreter that replicates the sh program.
 
 # License
 
