@@ -77,12 +77,12 @@ Another interesting point about Vue.js is that it allowed us to use a store, def
 
 ### List of components
 
-These components make up what a user experiences when they check out **Tradit**. Each component contains the code for a specific page of the app. These components can be located in [src/components](./src/components).
+These components make up what a user experiences when they check out **Tradit**. Each component contains the code for a specific page of the app. These components can be located in [webdynamic/templates](./webdynamic/templates).
 
 | Component | Description |
 |-----------|-------------|
-| [Landing.vue](./src/webdynamic/Landing.vue) | The landing page a user sees when they navigate to **PuppR**. |
-| [Login.vue](./src/webdynamic/templates/login.html)   | The login page. There's a link to go to the Signup page if a user hasn't signed up. |
+| [Landing.vue](./webdynamic/Landing.vue) | The landing page a user sees when they navigate to **PuppR**. |
+| [Login.](./webdynamic/templates/login.html)   | The login page. There's a link to go to the Signup page if a user hasn't signed up. |
 | [users.vue](./src/components/Matches.vue) | Page where users can see the other users they've matched with. A match occurs when two users have liked each other. |
 | [room.vue](./src/components/Navbar.vue) | The navigation bar that appears at the top of most every other component |
 | [Signup.vue](./src/components/Signup.vue) | Signup page for users who do not have an account. It asks for a valid email address and for them to make and confirm a password. |
