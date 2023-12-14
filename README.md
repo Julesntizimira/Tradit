@@ -54,6 +54,8 @@ Here is a preview for the chat room page:
 
 ## Architecture
 
+![Architecture](./landingImages/architecture.jpg)
+
 ### Overview
 
 The web app comprises Python and MySQL on the backend, with Flask as the framework interface. HTML/CSS and JavaScript handle frontend functionalities. Nginx manages the server side, served by the Gunicorn application server. An additional app for API runs on different ports. For certain functionalities, the main app accesses the server directly, while others use the API.
