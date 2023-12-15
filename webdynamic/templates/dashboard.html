@@ -37,9 +37,6 @@
         <div class="bar">
             <div class="home"><a href="{{ url_for('app_pages.dashboard') }}">HOME</a></div>
             <div class="about"><a href="{{ url_for('app_pages.about') }}">ABOUT</a></div>
-            <div class="about"><a href="{{ url_for('app_pages.about') }}">GENRE</a></div>
-            <div class="about"><a href="{{ url_for('app_pages.about') }}">OFFER</a></div>
-            <div class="about"><a href="{{ url_for('app_pages.about') }}">WISH</a></div>
             <div class="about"><a href="{{ url_for('app_pages.registerbook') }}">ADD Book</a></div>
             <div class="about"><a href="{{ url_for('app_pages.users') }}">COMMUNITY</a></div>
             <div class="profile-pic">
@@ -47,14 +44,6 @@
               <img src="../static/images/{{ current_user.id }}.jpg" alt="">
               {% endif %}
               <div class="tooltip"><a class="logout" href="{{ url_for('app_pages.logout') }}">Logout</a></div>
-            </div>
-            <div class="notification-bar">
-                <img src="../static/icons/notifications.svg" alt="">
-                <div class="notifications-count">3</div>
-            </div>
-            <div class="message-bar">
-                <img src="../static/icons/icons8-message-50 (1).png" alt="">
-                <div class="messages-count">4</div>
             </div>
         </div>
       </header>
@@ -149,7 +138,7 @@
         <script type="text/javascript">
 
         const gridContainers = document.querySelectorAll('.grid-container');
-        const scrollSpeed = 0.1; // Adjust this value to control the speed
+        const scrollSpeed = 0.1; // control the speed
 
         function handleWheel(event) {
           const gridRow = event.currentTarget.querySelector('.grid-row');
@@ -163,7 +152,7 @@
 
         function slideLeft(gridRow) {
           const firstItem = gridRow.firstElementChild;
-          const offset = (firstItem.offsetWidth + 50) * scrollSpeed; // Adjust speed here
+          const offset = (firstItem.offsetWidth + 50) * scrollSpeed; // Adjusting speed here
           gridRow.style.transform = `translateX(-${offset}px)`;
           gridRow.appendChild(firstItem);
         }
