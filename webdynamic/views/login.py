@@ -40,6 +40,9 @@ class RegisterForm(FlaskForm):
     
     def validate_email(self, email):
         '''email validation'''
+        existing_user_email = storage.session.query(User).filter(User.email == email.data).first()
+        if existing_user_email:
+            raise ValidationError("that email already exists please choose a different one" )
         try:
             # Validate the email using email_validator
             v = validate_email(email.data)
