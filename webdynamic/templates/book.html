@@ -11,7 +11,7 @@
         <div class="swappers">People who are offering it</div>
         <div class="users">
             {% for user in offers %}
-                <div class="user-box">
+                <div class="user-boxes">
                     <img class="user-profile-rep" src="../static/images/{{user.id}}.jpg" alt="">
                     <p class="username"><a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a></p>
                 </div>
@@ -35,7 +35,7 @@
         <div class="swappers">People who want to swap it</div>
         <div class="users">
             {% for user in wishes %}
-                <div class="user-box">
+                <div class="user-boxes">
                     <img class="user-profile-rep" src="../static/images/{{user.id}}.jpg" alt="">
                     <p class="username"><a href="{{ url_for('app_pages.room', user_id=user['id']) }}">{{ user['name'] }}</a></p>
                 </div>
