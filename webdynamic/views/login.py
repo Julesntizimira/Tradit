@@ -4,6 +4,7 @@ from flask_login import login_user, login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, IntegerField
 from wtforms.validators import input_required, Length, ValidationError, Email
+from email_validator import validate_email, EmailNotValidError
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_wtf.file import FileField, FileAllowed
 from flask_bcrypt import Bcrypt
@@ -32,11 +33,19 @@ class RegisterForm(FlaskForm):
     submit = SubmitField("Register")
 
     def validate_username(self, username):
+        '''user validation'''
         existing_user_username = storage.session.query(User).filter(User.username == username.data).first()
         if existing_user_username:
             raise ValidationError("that username already exists please choose a different one" )
-
-
+    
+    def validate_email(self, email):
+        '''email validation'''
+        try:
+            # Validate the email using email_validator
+            v = validate_email(email.data)
+            email.data = v["email"]
+        except EmailNotValidError as e:
+            raise ValidationError(str(e))
 
 
 @app_pages.route('/login', methods=['GET', 'POST'], strict_slashes=False)
