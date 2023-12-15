@@ -60,9 +60,9 @@ def get_user_who_offer_book(book_id):
     book = storage.get(Book, book_id)
     if not book:
         abort(404, 'user does not exist')
-    offer_list = []
-    offers = storage.session.query(User).join(Offer).join(Book).filter(Book.id == book_id)
-    for user in offers:
-        offer_list.append(user.to_dict())
-    return make_response(jsonify(offer_list))
-
+    offer_list = book.offers
+    offers = []
+    for offer in offer_list:
+        user = storage.get(User, offer.user_id)
+        offers.append(user.to_dict())
+    return make_response(jsonify(offers))
